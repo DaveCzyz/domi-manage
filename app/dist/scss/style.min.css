@@ -1,1 +1,1 @@
-body,html{margin:0;padding:0;background:red}
+body,html{margin:0;padding:0}body>.container-fluid{min-height:100vh;height:100%}
