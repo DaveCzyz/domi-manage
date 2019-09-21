@@ -22,31 +22,27 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="#">Pricing</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="#">Opinions</a>
+          <a class="nav-link" href="currency.php">Kursy NBP</a>
         </li>
 
       </ul>
 
+      <!-- Sign In / Log out buttons -->
       <ul class="navbar-nav nav-flex-icons">
+          <?php if(!$session->isLogged()) : ?>
+            <li class="nav-item">
+              <a class="nav-link" href="index.php">Zaloguj</a>
+            </li>
+          <?php endif; ?>
 
-        <li class="nav-item">
-          <a class="nav-link"><i class="fab fa-facebook-f"></i></a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link"><i class="fab fa-twitter"></i></a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link"><i class="fab fa-instagram"></i></a>
-        </li>
-
+        <?php if($session->isLogged()) : ?>
+          <li class="nav-item">
+            <a class="nav-link" href="logout.php">Wyloguj</a>
+          </li>
+        <?php endif; ?>
       </ul>
-
+      <!-- end -->
+      
     </div>
   </nav>
 
