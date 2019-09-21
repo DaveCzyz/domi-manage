@@ -14,18 +14,32 @@ class User{
     public $err = [];
 
     // Static function for verifing user during login
-    public static function verifyUser($m, $p){
+    public function verifyUser($m, $p){
         global $db;
+        global $session;
+        $encrypt;
+        $user_id;
         $email      = $db->escape_string($m);
         $password   = $db->escape_string($p);
 
         $sql = "SELECT * FROM ". self::$db_name;
-        $sql.= " WHERE email='".$email."' AND password='".$password."' LIMIT 1";
+        $sql.= " WHERE email='".$email."' LIMIT 1";
         $query = $db->query($sql);
 
-        return $query->num_rows;
+        while($row = $query->fetch_array(MYSQLI_ASSOC)){
+            $encrypt = $row['password'];
+            $user_id = $row['id'];
+        }
+
+        if($this->encryptPassword($password, $encrypt)){
+            $session->loginSession($user_id);
+            return true;
+        }else{
+            $this->err[] = "Nieprawidłowy email lub hasło";
+        }
     }
 
+    // Function for register new users
     public function validateNewUser(){
         global $db;
         $nameVal = '/[\s!#\'\"$@|\/\\*&^%{}();:\.,<>?\[\]=+_~`\-0-9]/i';
@@ -35,7 +49,10 @@ class User{
         $email = $db->escape_string($this->email);
         $pass  = $db->escape_string($this->password);
 
-        //Validate fields:
+        // Generator for activation code
+        $code = uniqid();
+
+        // Validate fields - first name and last name
         if($fname == "" or $lname == ""){
             $this->err[] = "Wpisz swoje imię i nazwisko";
         }else if(strlen($fname) <= 2 or strlen($lname) <= 2){
@@ -44,6 +61,7 @@ class User{
             $this->err[] = "Imię lub nazwisko zawiera niedozwolone znaki";
         }
 
+        // Validate fields - email
         if($email == ""){
             $this->err[] = "Wpisz swój adres email";
         }else if(!filter_var($email, FILTER_SANITIZE_EMAIL)){
@@ -54,18 +72,20 @@ class User{
             $this->err[] = "Adres email zawiera niedozwolone znaki";
         }
 
+        // Validate fields - password
         if($pass == ""){
             $this->err[] = "Wpisz swóje hasło";
         }else if(strlen($pass) < 8){
             $this->err[] = "Podane hasło jest za krótkie";
         }
 
+        // If errors not occur send query to database
         if(empty($this->err)){
             global $db;
             $pass = $this->hashPassword($pass);
             $sql = "INSERT INTO users ";
-            $sql.= " (firstName, lastName, email, password) ";
-            $sql.= " VALUES ('$fname', '$lname', '$email', '$pass')";
+            $sql.= " (firstName, lastName, email, password, activeCode) ";
+            $sql.= " VALUES ('$fname', '$lname', '$email', '$pass', '$code')";
             $db->query($sql);
             return true;
 
@@ -75,14 +95,20 @@ class User{
 
     }
 
+    // Hash passwords during login or register
     private function hashPassword($p){
         return password_hash($p, PASSWORD_DEFAULT);
     }
 
-    private function encryptPassword($e){
-
+    private function encryptPassword($h, $e){
+        if(password_verify($h, $e)){
+            return true;
+        }else{
+            return false;
+        }
     }
 
+    // Static function for comparing two data
     public static function compareData($a, $b){
         if($a == "" || $b == ""){
             return false;
@@ -90,17 +116,18 @@ class User{
         return ($a === $b) ? true : false;
     }
 
-
-    public function activeAccount(){
-        global $db;
-        if($this->active == "NO"){
-            $sql = "UPDATE ".self::$db_name." SET active='YES' WHERE id=".$this->id."";
-            $db->query($sql);
-            $this->active = "YES";
-            return true;
-        }else{
+    // Function for activation user account via email link
+    public function activeAccount($code = ""){
+        if(empty($code)){
             return false;
         }
+        global $db;
+        $sql = "UPDATE ". self::$db_name ."";
+        $sql.= " SET activ='YES', activeCode=''"; 
+        $sql.= " WHERE activeCode='".$code."' LIMIT 1";
+        $db->query($sql);
+
+        return true;
     }
 
 

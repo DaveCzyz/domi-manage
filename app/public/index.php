@@ -1,16 +1,21 @@
 <?php 
 require 'header.php'; 
 
+if($session->isLogged()){
+    redirect("dashboard.php");
+}
+
 $session->displayMessage();
 $msg    = $session->message;
 $errors = [];
 
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['login-submit'])){
-    $user = User::verifyUser($_POST['email'], $_POST['password']);
-    if($user == 1){
+    $u = new User();
+    if($u->verifyUser($_POST['email'], $_POST['password'])){
+        $session->message("Poprawnie zalogowałeś się do systemu");
         redirect("dashboard.php");
     }else{
-        foreach($user->err as $e){
+        foreach($u->err as $e){
             $errors[] = $e;
         }
     }
