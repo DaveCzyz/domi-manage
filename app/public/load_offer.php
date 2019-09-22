@@ -1,5 +1,5 @@
 <?php 
-// AIzaSyDKRo08mqmCsq7MXvNSCAYRkNUToHSyCxU
+// 
 require 'header.php'; 
 
 if(!$session->isLogged()){
@@ -38,5 +38,5 @@ $errors = [];
 
 
 <script src="js/google_maps.js"> </script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDKRo08mqmCsq7MXvNSCAYRkNUToHSyCxU&libraries=places&callback=initMap"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=???libraries=places&callback=initMap"></script>
 <?php require 'footer.php';?>
