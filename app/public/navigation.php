@@ -13,15 +13,27 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
 
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        <li class="nav-item <?php if(basename($_SERVER['PHP_SELF']) == "dashboard.php"){ echo "active"; } ?>">
+          <a class="nav-link" href="dashboard.php">Home</a>
         </li>
 
-        <li class="nav-item">
-          <a class="nav-link" href="#">Features</a>
+        <li class="nav-item <?php if(basename($_SERVER['PHP_SELF']) == "fleet.php"){ echo "active"; } ?>">
+          <a class="nav-link" href="fleet.php">Flota</a>
         </li>
 
-        <li class="nav-item">
+        <li class="nav-item <?php if(basename($_SERVER['PHP_SELF']) == "carriers.php"){ echo "active"; } ?>">
+          <a class="nav-link" href="carriers.php">Baza przewoźników</a>
+        </li>
+
+        <li class="nav-item <?php if(basename($_SERVER['PHP_SELF']) == "loads.php"){ echo "active"; } ?>">
+          <a class="nav-link" href="loads.php">Ładunki</a>
+        </li>
+
+        <li class="nav-item <?php if(basename($_SERVER['PHP_SELF']) == "load_offer.php"){ echo "active"; } ?>">
+          <a class="nav-link" href="load_offer.php">Wystaw ładunek</a>
+        </li>
+
+        <li class="nav-item <?php if(basename($_SERVER['PHP_SELF']) == "currency.php"){ echo "active"; } ?>">
           <a class="nav-link" href="currency.php">Kursy NBP</a>
         </li>
 
@@ -36,6 +48,9 @@
           <?php endif; ?>
 
         <?php if($session->isLogged()) : ?>
+          <li class="nav-item <?php if(basename($_SERVER['PHP_SELF']) == "user_profile.php"){ echo "active"; } ?>">
+            <a class="nav-link" href="user_profile.php">Panel użytkownika</a>
+          </li>
           <li class="nav-item">
             <a class="nav-link" href="logout.php">Wyloguj</a>
           </li>

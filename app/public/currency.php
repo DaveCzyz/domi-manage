@@ -20,7 +20,7 @@ require 'header.php';
                 <span class="input-group-text">Waluta</span>
             </div>
             <select class="browser-default custom-select" class="form-control" id="pickCurrency">
-                <option value="eur">Euro - EUR</option>
+                <option value="eur" selected>Euro - EUR</option>
                 <option value="gbp">Funty - GBP</option>
             </select>
         </div>
@@ -83,4 +83,5 @@ require 'header.php';
 
 </div><!-- end -->
 
+<script src="js/currency.js"></script>
 <?php require 'footer.php';?>

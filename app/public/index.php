@@ -6,18 +6,17 @@ if($session->isLogged()){
 }
 
 $session->displayMessage();
-$msg    = $session->message;
-$errors = [];
+$msg_status = $session->status;
+$msg        = $session->message;
 
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['login-submit'])){
     $u = new User();
     if($u->verifyUser($_POST['email'], $_POST['password'])){
-        $session->message("Poprawnie zalogowałeś się do systemu");
+        $session->message("Poprawnie zalogowałeś się do systemu", "success");
         redirect("dashboard.php");
     }else{
-        foreach($u->err as $e){
-            $errors[] = $e;
-        }
+        $session->message($u->err[0], "error");
+        redirect("index.php");
     }
 }
 
@@ -32,30 +31,16 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['register-submit'])){
     $user = new User();
     $user->firstName   = $_POST['first_name'];
     $user->lastName    = $_POST['last_name'];
+    $user->email       = $_POST['email'];
+    $user->password    = $_POST['password'];
 
-    if(User::compareData($_POST['email'], $_POST['confirm_email'])){
-        $user->email = $_POST['email'];
+    if($user->validateNewUser($_POST['confirm_email'], $_POST['confirm_password'])){
+        unset($_SESSION['tmp_firstName'], $_SESSION['tmp_lastName'], $_SESSION['tmp_email'],$_SESSION['tmp_confirmEmail']);
+        $session->message("Na podany adres został wysłany link aktywacyjny", "success");
+        redirect("index.php");  
     }else{
-        $errors[] = "Adresy email nie są takie same";
-    }
-
-    if(User::compareData($_POST['password'], $_POST['confirm_password'])){
-        $user->password = $_POST['password'];
-    }else{
-        $errors[] = "Hasła nie są takie same";
-    }
-
-    if(empty($errors)){
-        if($user->validateNewUser()){
-            global $session;
-            unset($_SESSION['tmp_firstName'], $_SESSION['tmp_lastName'], $_SESSION['tmp_email'],$_SESSION['tmp_confirmEmail']);
-            $session->message("Na podany adres został wysłany link aktywacyjny");
-            redirect("index.php");
-        }else{
-            foreach($user->err as $e){
-                $errors[] = $e;
-            }
-        }
+        $session->message($user->err[0], "error");
+        redirect("index.php"); 
     }
 }
 
@@ -66,14 +51,9 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['register-submit'])){
     <div class="col-10 center">
         <h3 class="text-center">Platforma do zarządania ładunkami</h3>
         <?php 
-        if(!empty($errors)){
-            foreach($errors as $v){
-                Session::throwMessage("error", $v);
+            if(!empty($msg) && !empty($msg_status)){
+                Session::throwMessage($msg_status, $msg);
             }
-        } 
-        if(!empty($msg)){
-            Session::throwMessage("success", $msg);
-        }
         ?>
     </div>
 </div>

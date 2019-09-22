@@ -3,6 +3,7 @@
 class Session{
 
     public $message;
+    public $status;
     public $user_id;
     private $isSigned = false;
 
@@ -34,21 +35,23 @@ class Session{
 
     public function logout(){
         unset($_SESSION['user_id']);
-        $this->message("Zostałeś poprawnie wylogowany");
+        $this->message("Zostałeś poprawnie wylogowany", "success");
         redirect("index.php");
     }
 
-    public function message($msg = ""){
-        if(!empty($msg)){
-            $_SESSION['message'] = $msg;
+    public function message($msg = "", $status = ""){
+        if(!empty($msg) && !empty($status)){
+            $_SESSION['msg_status']  = $status;
+            $_SESSION['message']     = $msg;
         }
     }
 
     public function displayMessage(){
-        if(isset($_SESSION['message'])){
+        if(isset($_SESSION['message']) && isset($_SESSION['msg_status'])){
+            $this->status  = $_SESSION['msg_status'];
             $this->message = $_SESSION['message'];
         }
-        unset($_SESSION['message']);
+        unset($_SESSION['msg_status'], $_SESSION['message']);
     }
     
 
