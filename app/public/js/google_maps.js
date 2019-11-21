@@ -94,6 +94,4 @@
     if(orig == undefined || dest == undefined){
         return;
     }
-
-    console.log('elo')
 }  
