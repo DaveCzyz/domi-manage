@@ -1,1 +1,3 @@
 node_modules
+app/vendor/paragonie
+app/venor/symfony
