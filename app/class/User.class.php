@@ -1,8 +1,12 @@
 <?php
 
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
+
 class User{
     protected static $db_name = "users";
     public $id;
+    public $uuid;
     public $firstName;
     public $lastName;
     public $email;
@@ -20,6 +24,7 @@ class User{
         global $session;
         $encrypt;
         $user_id;
+        $active;
         $email      = $db->escape_string($m);
         $password   = $db->escape_string($p);
 
@@ -29,14 +34,26 @@ class User{
 
         if($query->num_rows == 1){
 
+            $_SESSION['tmp_email_login'] = $email;
+
             while($row = $query->fetch_array(MYSQLI_ASSOC)){
                 $encrypt = $row['password'];
                 $user_id = $row['id'];
+                $active  = $row['activ'];
+            }
+
+            if($active == "NO"){
+                $this->err[] = 'Konto nie zostało aktywowane';
+                return false;
             }
     
             if($this->encryptPassword($password, $encrypt)){
+                unset($_SESSION['tmp_email_login']);
                 $session->loginSession($user_id);
                 return true;
+            }else{
+                $this->err[] = "Podane hasło jest nieprawidłowe";
+                return false;
             }
 
         }else{
@@ -56,6 +73,7 @@ class User{
         $pass  = $db->escape_string($this->password);
         $confEmail = $db->escape_string($em);
         $confPass  = $db->escape_string($ps);
+        $uuid = "";
 
         // Generator for activation code
         $code = uniqid();
@@ -102,13 +120,21 @@ class User{
             return false;
         }
 
+        // Generate Unique User ID
+        try{
+            $uuid1 = Uuid::uuid1();
+            $uuid = $uuid1->toString();
+        }catch(UnsatisfiedDependencyException $e){
+            $this->err[] = "Błąd przy generowaniu UUID: " . $e->getMessage();
+        }
+
         // If errors not occur send query to database
         if(empty($this->err)){
             global $db;
             $pass = $this->hashPassword($pass);
             $sql = "INSERT INTO users ";
-            $sql.= " (firstName, lastName, email, password, activeCode) ";
-            $sql.= " VALUES ('$fname', '$lname', '$email', '$pass', '$code')";
+            $sql.= " (uuid, firstName, lastName, email, password, activeCode) ";
+            $sql.= " VALUES ('$uuid', '$fname', '$lname', '$email', '$pass', '$code')";
             $db->query($sql);
             return true;
 
@@ -167,6 +193,7 @@ class User{
 
         while($row = $query->fetch_assoc()){
             $this->id         = $row['id'];
+            $this->uuid       = $row['uuid'];
             $this->firstName  = $row['firstName'];
             $this->lastName   = $row['lastName'];
             $this->email      = $row['email'];

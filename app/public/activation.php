@@ -3,11 +3,10 @@ require_once '../config/init.php';
 
 if(isset($_GET['activ'])){
     $code = $_GET['activ'];
-    echo $code;
     $user = new User();
     if($user->activeAccount($code)){
         global $session;
-        $session->message("Konto aktywowane. Zaloguj się");
+        $session->message("Konto aktywowane. Zaloguj się", "success");
         redirect("index.php");
     };
 

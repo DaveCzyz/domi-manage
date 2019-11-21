@@ -9,6 +9,18 @@ $session->displayMessage();
 $msg    = $session->message;
 $errors = [];
 
+// Get user class
+$userID = $_SESSION['user_id'];
+$user   = new User();
+$user->getUser($userID);
+
+// Get user loads
 
 
 ?>
+
+
+
+
+
+

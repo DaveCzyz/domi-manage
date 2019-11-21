@@ -19,7 +19,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['login-submit'])){
         redirect("index.php");
     }
 }
-
+ 
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['register-submit'])){
     // Temporary store for inputs
     $_SESSION['tmp_firstName']      = $_POST['first_name'];
@@ -68,7 +68,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['register-submit'])){
             <p class="h4 mb-4">Zaloguj się</p>
 
             <!-- Email -->
-            <input type="email" class="form-control mb-4" name="email" placeholder="E-mail" required>
+            <input type="email" class="form-control mb-4" name="email" placeholder="E-mail" value="<?php if(isset($_SESSION['tmp_email_login'])){ echo $_SESSION['tmp_email_login']; }  ?>" required>
 
             <!-- Password -->
             <input type="password" class="form-control mb-4" name="password" placeholder="Password" required>
