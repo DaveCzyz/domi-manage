@@ -1,0 +1,224 @@
+[
+    {
+        "country"   : "Austria",
+        "ISO"       : "AT",
+        "postcode"  : "0000",
+        "regex"     : "^[0-9]{4}"
+    }, 
+    {
+        "country"   : "Belgia",
+        "ISO"       : "BE",
+        "postcode"  : "0000",
+        "regex"     : "^[0-9]{4}"
+    },
+    {
+        "country"   : "Białoruś",
+        "ISO"       : "BY",
+        "postcode"  : "000000",
+        "regex"     : "^[0-9]{6}"
+    },
+    {
+        "country"   : "Bułgaria",
+        "ISO"       : "BG",
+        "postcode"  : "0000",
+        "regex"     : "^[0-9]{4}"
+    },
+    {
+        "country"   : "Chorwacja",
+        "ISO"       : "HR",
+        "postcode"  : "00000",
+        "regex"     : "^[0-9]{5}"
+    },
+    {
+        "country"   : "Cypr",
+        "ISO"       : "CY",
+        "postcode"  : "0000",
+        "regex"     : "^[0-9]{4}"
+    },
+    {
+        "country"   : "Czechy",
+        "ISO"       : "CZ",
+        "postcode"  : "000 00",
+        "regex"     : "^[0-9]{3} [0-9]{2}"
+    },
+    {
+        "country"   : "Dania",
+        "ISO"       : "DK",
+        "postcode"  : "0000",
+        "regex"     : "^[0-9]{4}"
+    },
+    {
+        "country"   : "Estonia",
+        "ISO"       : "EE",
+        "postcode"  : "00000",
+        "regex"     : "^[0-9]{5}"
+    },
+    {
+        "country"   : "Finlandia",
+        "ISO"       : "FI",
+        "postcode"  : "00000",
+        "regex"     : "^[0-9]{5}"
+    },
+    {
+        "country"   : "Francja",
+        "ISO"       : "FR",
+        "postcode"  : "00000",
+        "regex"     : "^[0-9]{5}"
+    },
+    {
+        "country"   : "Grecja",
+        "ISO"       : "GR",
+        "postcode"  : "000 00",
+        "regex"     : "^[0-9]{3} [0-9]{2}"
+    },
+    {
+        "country"   : "Gruzja",
+        "ISO"       : "GL",
+        "postcode"  : "0000-0000",
+        "regex"     : "^[0-9]{4}-[0-9]{4}"
+    },
+    {
+        "country"   : "Hiszpania",
+        "ISO"       : "ES",
+        "postcode"  : "00000",
+        "regex"     : "^[0-9]{5}"
+    },
+    {
+        "country"   : "Holandia",
+        "ISO"       : "NL",
+        "postcode"  : "0000",
+        "regex"     : "^[0-9]{4}"
+    },
+    {
+        "country"   : "Irlandia",
+        "ISO"       : "IE",
+        "postcode"  : "000 0000",
+        "regex"     : "^[A-Z0-9]{3} [A-Z0-9]{4}"
+    },
+    {
+        "country"   : "Islandia",
+        "ISO"       : "IS",
+        "postcode"  : "000",
+        "regex"     : "^[0-9]{3}"
+    },
+    {
+        "country"   : "Litwa",
+        "ISO"       : "LT",
+        "postcode"  : "00000",
+        "regex"     : "^[0-9]{5}"
+    },
+    {
+        "country"   : "Luksemburg",
+        "ISO"       : "LU",
+        "postcode"  : "0000",
+        "regex"     : "^[0-9]{4}"
+    },
+    {
+        "country"   : "Łotwa",
+        "ISO"       : "LV",
+        "postcode"  : "0000",
+        "regex"     : "^[0-9]{4}"
+    },
+    {
+        "country"   : "Mołdawia",
+        "ISO"       : "MD",
+        "postcode"  : "0000",
+        "regex"     : "^[0-9]{4}"
+    },
+    {
+        "country"   : "Monako",
+        "ISO"       : "MC",
+        "postcode"  : "00000",
+        "regex"     : "^[0-9]{5}"
+    },
+    {
+        "country"   : "Niemcy",
+        "ISO"       : "DE",
+        "postcode"  : "00000",
+        "regex"     : "^[0-9]{5}"
+    },
+    {
+        "country"   : "Norwegia",
+        "ISO"       : "NO",
+        "postcode"  : "0000",
+        "regex"     : "^[0-9]{4}"
+    },
+    {
+        "country"   : "Polska",
+        "ISO"       : "PL",
+        "postcode"  : "00-000",
+        "regex"     : "^[0-9]{2}-[0-9]{3}"
+    },
+    {
+        "country"   : "Portugalia",
+        "ISO"       : "PT",
+        "postcode"  : "0000-000",
+        "regex"     : "^[0-9]{4}-[0-9]{3}"
+    },
+    {
+        "country"   : "Rosja",
+        "ISO"       : "RU",
+        "postcode"  : "000000",
+        "regex"     : "^[0-9]{6}"
+    },
+    {
+        "country"   : "Rumunia",
+        "ISO"       : "RO",
+        "postcode"  : "000000",
+        "regex"     : "^[0-9]{6}"
+    },
+    {
+        "country"   : "Słowacja",
+        "ISO"       : "SK",
+        "postcode"  : "000 00",
+        "regex"     : "^[0-9]{3} [0-9]{2}"
+    },
+    {
+        "country"   : "Słowenia",
+        "ISO"       : "SI",
+        "postcode"  : "0000",
+        "regex"     : "^[0-9]{4}"
+    },
+    {
+        "country"   : "Szwajcaria",
+        "ISO"       : "CH",
+        "postcode"  : "0000",
+        "regex"     : "^[0-9]{4}"
+    },
+    {
+        "country"   : "Szwecja",
+        "ISO"       : "SE",
+        "postcode"  : "000 00",
+        "regex"     : "^[0-9]{3} [0-9]{2}"
+    },
+    {
+        "country"   : "Turcja",
+        "ISO"       : "TR",
+        "postcode"  : "00000",
+        "regex"     : "^[0-9]{5}"
+    },
+    {
+        "country"   : "Ukraina",
+        "ISO"       : "UA",
+        "postcode"  : "00000",
+        "regex"     : "^[0-9]{5}"
+    },
+    {
+        "country"   : "Węgry",
+        "ISO"       : "HU",
+        "postcode"  : "0000",
+        "regex"     : "^[0-9]{4}"
+    },
+    {
+        "country"   : "Wielka Brytania",
+        "ISO"       : "GB",
+        "postcode"  : "",
+        "regex"     : ""
+    },
+    {
+        "country"   : "Włochy",
+        "ISO"       : "IT",
+        "postcode"  : "00000",
+        "regex"     : "^[0-9]{5}"
+    }
+]

@@ -12,11 +12,9 @@ class Loads{
 
     public $origin_name;
     public $origin_country;
-    public $origin_postcode;
 
     public $destination_name;
     public $destination_country;
-    public $destination_postcode;
 
     public $active_loads;
     
