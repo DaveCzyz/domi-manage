@@ -16,6 +16,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.9/css/mdb.min.css" rel="stylesheet">
     <!-- User style CSS -->
     <link rel="stylesheet" href="../dist/scss/style.min.css">
+    <!-- Flags downloaded via Composer https://github.com/lipis/flag-icon-css -->
+    <link rel="stylesheet" href="../vendor/components/flag-icon-css/css/flag-icon.min.css">
     <!-- JQuery -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <!-- Bootstrap tooltips -->

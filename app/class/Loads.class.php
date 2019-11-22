@@ -9,6 +9,7 @@ class Loads{
 
     public $load_id;
     public $user_id;
+    public $customer;
 
     public $origin_name;
     public $origin_country;
@@ -29,7 +30,7 @@ class Loads{
 
 
     // Create new load
-    public function addNewLoad($loadData){
+    public function addNewGroup($loadData){
         global $db;
 
        

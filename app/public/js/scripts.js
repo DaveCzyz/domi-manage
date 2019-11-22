@@ -14,3 +14,14 @@ $("#toogleChangePassword").click(function(){
 $("#toggleDeleteAccount").click(function(){
     $("#deleteAccount").slideToggle("fast");
 });
+
+// Toggle slide button in loads.php
+$("#addNewLoadGroup").click(function(){
+    $("#loadGroup").slideToggle("fast");
+    $(this).hide();
+});
+
+$("#cancelLoadGroup").click(function(){
+    $("#loadGroup").slideToggle("fast");
+    $("#addNewLoadGroup").show("fast");
+});
