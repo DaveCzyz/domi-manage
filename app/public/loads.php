@@ -39,6 +39,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addLoadGroup'])){
     }
 }
 
+
 ?>
 
 <div class="row justify-content-center">
@@ -125,6 +126,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addLoadGroup'])){
 
 
 
+
 <!-- Display avaiable loads-->
 <div class="row justify-content-center">
     <div class="col-5 border">
@@ -132,23 +134,35 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addLoadGroup'])){
         <h4>Grupy ładunków</h4>
 
         <?php foreach($groupLoads as $key => $value): ?>
-        <!-- Load group card -->
-        <div class="card">
-            <!-- Load group customer name-->
-            <div class="card-header">
-                <?php echo $value['customer']; ?>
-            </div>
-            <div class="card-body">
-                <h5 class="card-title"><?php echo $value['origin_name']; ?> - <?php echo $value['destination_name']; ?></h5>
+            <form method="POST" action="manage_loads.php">
+                <!-- Hidden input for ID -->
+                <input type="hidden" name="id" value="<?php echo $value['id'];?>">
+                <!-- Hidden input for load ID -->
+                <input type="hidden" name="load_id" value="<?php echo $value['load_id'];?>">
 
-                <span class="flag-icon flag-icon-gr"></span>
-                <p class="card-text"><?php echo $value['origin_country']; ?> - <?php echo $value['destination_country']; ?></p>
-
-                <a href="#!" class="btn btn-primary">Go somewhere</a>
-            </div>
-        </div>
+                <!-- Load group card -->
+                <div class="card">
+                    <!-- Load group customer name-->
+                    <div class="card-header green darken-1 text-white">
+                        <?php echo $value['customer']; ?>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title"><?php echo $value['origin_name']; ?> - <?php echo $value['destination_name']; ?></h5>
+                        <i class="card-text"><?php echo $value['origin_country']; ?> <span class="flag-icon flag-icon-<?php echo strtolower($value['origin_iso']); ?>"></span> - <?php echo $value['destination_country']; ?> <span class="flag-icon flag-icon-<?php echo strtolower($value['destination_iso']); ?>"></span></i>
+                        <br>
+                        <input type="submit" name="addGroup" class="btn btn-success green darken-1 btn-sm" value="Wystaw">
+                        <input type="submit" name="editGroup" class="btn btn-success green darken-1 btn-sm" value="Edytuj">
+                        <a href="" id="seeMore" data-loadID="<?php echo $value['load_id'];?>" class="btn btn-success green darken-1 btn-sm">Rozwiń (<?php echo $value['related_loads']; ?>)</a>
+                        <input type="submit" name="deleteGroup" class="btn btn-warning btn-sm" onclick="return confirm('Are you sure you want to do that?');" value="Usuń">
+                    </div>
+                </div>
+            </form>
         <?php endforeach; ?>
     </div>
+
+
+
+
 
 
 
@@ -175,8 +189,8 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addLoadGroup'])){
 
 
 
-
-
+<!-- AJAX request for 'see more' button in group of loads -->
+<script src="js/groupManage.js"></script>
 <!-- All AJAX request for countries live search are in script below -->
 <script src="js/liveSearch.js"></script>
 <?php require 'footer.php';?>
