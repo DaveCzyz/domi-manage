@@ -90,8 +90,29 @@ class Loads{
     }
 
     // Get all groups from DB
-    public function getGroups(){
-        
+    public static function getGroups($id){
+        if(empty($id)){
+            $this->err['Brak ładunków do wyświetlenia'];
+            return false;
+        }
+
+        global $db;
+        $loads = [];
+
+        $sql = "SELECT * FROM " . self::$db_name . " ";
+        $sql.= "WHERE user_id='".$id."'";
+        $query = $db->query($sql);
+
+        while($row = $query->fetch_assoc()){
+            $loads[] = $row;
+        }
+
+        return $loads;
+    }
+
+    // Get specify group
+    public static function getOneGroup($id){
+
     }
 
 

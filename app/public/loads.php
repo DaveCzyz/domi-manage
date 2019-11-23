@@ -17,7 +17,7 @@ $user   = new User();
 $user->getUser($userID);
 
 // Get user loads
-
+$groupLoads = Loads::getGroups($userID);
 
 // Add new group of loads to database
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addLoadGroup'])){
@@ -57,7 +57,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addLoadGroup'])){
         <!-- Loads group form -->
         <form class="border border-light p-5" action="loads.php" method="POST">
 
-            <p class="h4 mb-4 text-center">Dodaj nową grupe ładunków</p>
+            <p class="h4 mb-4 text-center">Dodaj nową grupę ładunków</p>
 
             <!-- Customer -->
             <div class="form-row mb-4">
@@ -115,14 +115,57 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addLoadGroup'])){
 <!-- Add new group of loads -->
 <div class="row justify-content-center">
     <div class="col-3 text-center">
-        <button type="button" id="addNewLoadGroup" class="btn btn-success green darken-1">Dodaj ładunek</button>
+        <button type="button" id="addNewLoadGroup" class="btn btn-success green darken-1">Dodaj grupę</button>
     </div>
 </div><!-- end-->
 
+
+
+
+
+
+
 <!-- Display avaiable loads-->
+<div class="row justify-content-center">
+    <div class="col-5 border">
+        <!-- Column tittle -->
+        <h4>Grupy ładunków</h4>
+
+        <?php foreach($groupLoads as $key => $value): ?>
+        <!-- Load group card -->
+        <div class="card">
+            <!-- Load group customer name-->
+            <div class="card-header">
+                <?php echo $value['customer']; ?>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title"><?php echo $value['origin_name']; ?> - <?php echo $value['destination_name']; ?></h5>
+
+                <span class="flag-icon flag-icon-gr"></span>
+                <p class="card-text"><?php echo $value['origin_country']; ?> - <?php echo $value['destination_country']; ?></p>
+
+                <a href="#!" class="btn btn-primary">Go somewhere</a>
+            </div>
+        </div>
+        <?php endforeach; ?>
+    </div>
 
 
 
+
+
+
+
+
+
+
+    <div class="col-1"></div>
+
+    <div class="col-5 border">
+        <h4>Twoje aktywne ładunki</h4>
+    </div>
+
+</div><!-- end-->
 
 
 
