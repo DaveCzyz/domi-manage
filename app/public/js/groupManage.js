@@ -6,17 +6,14 @@ $("#seeMore").click(function(event){
     }
 
     $.ajax({
-        type:"POST",
+        type:"GET",
         dataType:"text",
         url:"ajax.php",
-        data: {"getLoad" : loadID},
-        success: function(response){
-            console.log(response);
-        }
+        data: {getLoad : loadID}
+    }).done(function(respond){
+        var t = JSON.parse(respond);
+        console.log(t)
     })
 
 
-
-
-    //console.log(loadID)
 })

@@ -39,7 +39,6 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addLoadGroup'])){
     }
 }
 
-
 ?>
 
 <div class="row justify-content-center">

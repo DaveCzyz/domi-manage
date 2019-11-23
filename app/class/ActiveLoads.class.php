@@ -43,8 +43,6 @@ class ActiveLoads{
             return false;
         }
 
-        //echo json_encode('elo');
-
         $sql = "SELECT * FROM ". self::$db_name . " ";
         $sql.= "WHERE related_with='". $id . "' ";
         $query = $db->query($sql);
@@ -52,10 +50,14 @@ class ActiveLoads{
         $loadArray = [];
 
         while($row = $query->fetch_assoc()){
-            $loadArray[] = $row;
+            $loadArray[] = array_map('utf8_encode', $row);
         }
 
-        return json_encode($loadArray);
+        if(!empty($loadArray)){
+            return json_encode($loadArray);
+        }else{
+            return false;
+        }
     }
 }
 
