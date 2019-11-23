@@ -16,6 +16,8 @@ $userID = $_SESSION['user_id'];
 $user   = new User();
 $user->getUser($userID);
 
+
+
 // Delete group of loads
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['deleteGroup'])){
     if($_POST['id'] != "" && $_POST['load_id'] != ""){
@@ -33,11 +35,33 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['deleteGroup'])){
     }
 }
 
+// Edit group 
+$currentLoad;
 
+if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['editGroup'])){
+    $id      = $_POST['id'];
+    $load_id = $_POST['load_id'];
+    $user_id = $user;
+
+    // przypisać do current load funkcje z klasy loads
+    // $currentLoad = Loads::getOneGroup();
+}
+
+
+
+// Edit single load
 
 
 ?>
 
+
+
+<?php if($currentLoad != "") : ?>
+
+kot tutaj
+
+
+<?php endif; ?>
 
 
 

@@ -154,6 +154,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addLoadGroup'])){
                         <a href="" id="seeMore" data-loadID="<?php echo $value['load_id'];?>" class="btn btn-success green darken-1 btn-sm">Rozwiń (<?php echo $value['related_loads']; ?>)</a>
                         <input type="submit" name="deleteGroup" class="btn btn-warning btn-sm" onclick="return confirm('Are you sure you want to do that?');" value="Usuń">
                     </div>
+                    <ul style="display:none" id="group-<?php echo $value['load_id'];?>"></ul>
                 </div>
             </form>
         <?php endforeach; ?>
