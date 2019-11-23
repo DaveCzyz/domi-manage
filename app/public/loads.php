@@ -1,13 +1,15 @@
 <?php 
 require 'header.php'; 
 
+// Check if user are logged
 if(!$session->isLogged()){
     redirect("index.php");
 }
 
+// Display system messages
 $session->displayMessage();
-$msg    = $session->message;
-$errors = [];
+$msg_status = $session->status;
+$msg        = $session->message;
 
 // Get user class
 $userID = $_SESSION['user_id'];
@@ -19,8 +21,22 @@ $user->getUser($userID);
 
 // Add new group of loads to database
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addLoadGroup'])){
-    print_r($_POST['customerName']);
-
+    $loadGroup                      = new Loads();
+    $loadGroup->user_id             = $userID;
+    $loadGroup->customer            = $_POST['customerName'];
+    $loadGroup->origin_name         = $_POST['originCity'];
+    $loadGroup->origin_country      = $_POST['originCountry'];
+    $loadGroup->destination_name    = $_POST['destinationCity'];
+    $loadGroup->destination_country = $_POST['destinationCountry'];
+    $loadGroup->active_loads        = "NO";
+    // Save new group
+    if($loadGroup->addNewGroup()){
+        $session->message("Nowa grupa została utworzona poprawnie", "success");
+        redirect("loads.php");  
+    }else{
+        $session->message($user->err[0], "error");
+        redirect("loads.php"); 
+    }
 }
 
 ?>
@@ -84,7 +100,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addLoadGroup'])){
 
             <div class="form-row mb-4">
                 <div class="col-6 text-right">
-                    <input class="btn btn-warning warning-color btn-block my-4" id="cancelLoadGroup" type="submit" value="Anuluj">
+                    <input class="btn btn-warning warning-color btn-block my-4" id="cancelLoadGroup" type="button" value="Anuluj">
                 </div>
                 <div class="col-6">
                     <input class="btn btn-success green darken-1 btn-block my-4" id="addLoadGroup" name="addLoadGroup" type="submit" value="Dodaj">
@@ -94,14 +110,29 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addLoadGroup'])){
         </form>
         <!-- Loads group form -->
     </div>
-</div>
+</div><!-- end -->
 
-
+<!-- Add new group of loads -->
 <div class="row justify-content-center">
     <div class="col-3 text-center">
         <button type="button" id="addNewLoadGroup" class="btn btn-success green darken-1">Dodaj ładunek</button>
     </div>
-</div>
+</div><!-- end-->
+
+<!-- Display avaiable loads-->
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <!-- All AJAX request for countries live search are in script below -->
 <script src="js/liveSearch.js"></script>
