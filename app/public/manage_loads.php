@@ -164,7 +164,75 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['deleteGroup'])){
         <div class="card">
             <div class="card-body">
                 <!-- Card Title -->
-                <p class="h4 text-center py-4">Ładunki powiązane z grupą</p>
+                <p class="h4 text-center py-4">Ładunki powiązane z grupą <button id="addNewLoad" class="btn btn-success green darken-1 btn-sm" >Dodaj</button></p>
+
+                <div class="row justify-content-center" id="addNewRelatedLoad">
+                    <div class="col-6">
+                        <!-- form for add new load -->
+                        <form action="manage_loads.php" method="POST">
+                            <p class="h5 mb-4 text-center">Dodaj nowy ładunek</p>
+
+                            <!-- Origin -->
+                            <div class="form-row mb-4">
+                                <div class="col">
+                                    <!-- Origin city -->
+                                    <label for="destinationCity" class="text-left">Miejsce załadunku</label>
+                                    <input type="text" id="destinationCity" name="destinationCity" class="form-control" required>
+                                </div>
+                                <div class="col">
+                                    <!-- Origin Country-->
+                                    <label for="destinationCountry">Kraj załadunku</label>
+                                    <input type="text" id="destinationCountry" name="destinationCountry" class="form-control" required>
+                                    <ul class="list-group" id="destinationResult"></ul>
+                                </div>
+                            </div>
+
+                            
+                            <!-- Destination -->
+                            <div class="form-row mb-4">
+                                <div class="col">
+                                    <!-- Destination city -->
+                                    <label for="destinationCity" class="text-left">Miejsce rozładunku</label>
+                                    <input type="text" id="destinationCity" name="destinationCity" class="form-control" required>
+                                </div>
+                                <div class="col">
+                                    <!-- Destination Country-->
+                                    <label for="destinationCountry">Kraj rozładunku</label>
+                                    <input type="text" id="destinationCountry" name="destinationCountry" class="form-control" required>
+                                    <ul class="list-group" id="destinationResult"></ul>
+                                </div>
+                            </div>
+
+
+                            <!-- Details -->
+                            <div class="form-row mb-4">
+                                <div class="col">
+                                    <!-- Details weight -->
+                                    <label for="destinationCity" class="text-left">Waga towaru</label>
+                                    <input type="text" id="destinationCity" name="destinationCity" class="form-control" required>
+                                </div>
+                                <div class="col">
+                                    <!-- Details lenght-->
+                                    <label for="destinationCountry">Długość towaru</label>
+                                    <input type="text" id="destinationCountry" name="destinationCountry" class="form-control" required>
+                                    <ul class="list-group" id="destinationResult"></ul>
+                                </div>
+                            </div>
+
+                            <div class="text-center"> 
+                                <!-- Sign in button -->
+                                <input class="btn btn-success green darken-1 btn-sm" name="addNewLoad" type="submit" value="Dodaj">
+                                <button id="cancelNewLoad" class="btn btn-warning btn-sm">Anuluj</button>
+                            </div>  
+
+                        </form><!-- end form -->
+                    </div><!-- ned col-4 -->
+                </div><!-- end row -->
+
+
+
+
+
 
                 <?php if($relatedLoad == "" && !is_array($relatedLoad)) : ?>
                     <p class="text-center">Brak</p>

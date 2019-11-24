@@ -15,7 +15,7 @@ $("#editDestinationName").on('change', greatLetter);
 
 // end
 
-//************* AJAX reusable request for JSON county list *************//
+//************* AJAX reusable request for JSON country list *************//
 $.ajaxSetup({ cache: false });
 function callAjaxLiveSearch(){
     // Result list
@@ -66,3 +66,11 @@ $("#editOriginResult").on("click", "li", liveSearchResult);
 $("#editDestinationResult").on("click","li", liveSearchResult);
 
 // end
+
+
+
+
+
+
+
+//************* AJAX reusable request for JSON trailers list *************//

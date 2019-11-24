@@ -152,7 +152,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addLoadGroup'])){
                         <input type="submit" name="addGroup" class="btn btn-success green darken-1 btn-sm" value="Wystaw">
                         <input type="submit" name="editGroup" class="btn btn-success green darken-1 btn-sm" value="Edytuj">
                         <a href="" id="seeMore" data-loadID="<?php echo $value['load_id'];?>" class="btn btn-success green darken-1 btn-sm">Rozwiń (<?php echo $value['related_loads']; ?>)</a>
-                        <input type="submit" name="deleteGroup" class="btn btn-warning btn-sm" onclick="return confirm('Are you sure you want to do that?');" value="Usuń">
+                        <input type="submit" name="deleteGroup" class="btn btn-danger btn-sm" onclick="return confirm('Czy napewno chcesz usunąć wybraną grupę ładunków? Zmian nie można cofnąć.');" value="Usuń">
                     </div>
                     <ul style="display:none" id="group-<?php echo $value['load_id'];?>"></ul>
                 </div>

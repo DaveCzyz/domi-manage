@@ -25,3 +25,12 @@ $("#cancelLoadGroup").click(function(){
     $("#loadGroup").slideToggle("fast");
     $("#addNewLoadGroup").show("fast");
 });
+
+// Toggle slide button in manage_loads.php
+$("#addNewLoad").click(function(){
+    $("#addNewRelatedLoad").slideToggle("fast");
+});
+$("#cancelNewLoad").click(function(e){
+    e.preventDefault();
+    $("#addNewRelatedLoad").slideToggle("fast");
+});
