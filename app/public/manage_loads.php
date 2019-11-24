@@ -172,34 +172,52 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['deleteGroup'])){
                         <form action="manage_loads.php" method="POST">
                             <p class="h5 mb-4 text-center">Dodaj nowy ładunek</p>
 
-                            <!-- Origin -->
+                            <!-- Realted with-->
+                            <input type="hidden" value="<?php echo $l->load_id; ?>">
+
+                            <!-- Origin city -->
                             <div class="form-row mb-4">
                                 <div class="col">
                                     <!-- Origin city -->
-                                    <label for="destinationCity" class="text-left">Miejsce załadunku</label>
+                                    <label for="destinationCity" class="text-left">Miasto załadunku</label>
                                     <input type="text" id="destinationCity" name="destinationCity" class="form-control" required>
-                                </div>
-                                <div class="col">
-                                    <!-- Origin Country-->
-                                    <label for="destinationCountry">Kraj załadunku</label>
-                                    <input type="text" id="destinationCountry" name="destinationCountry" class="form-control" required>
-                                    <ul class="list-group" id="destinationResult"></ul>
                                 </div>
                             </div>
 
+                            <!-- Origin -->
+                            <div class="form-row mb-4">
+                                <div class="col">
+                                    <!-- Origin Country -->
+                                    <label for="destinationCity" class="text-left">Kraj załadunku</label>
+                                    <input type="text" id="destinationCity" name="destinationCity" class="form-control" value="<?php echo $l->origin_country; ?>" required>
+                                </div>
+                                <div class="col">
+                                    <!-- Origin Postcode-->
+                                    <label for="destinationCountry">Kod pocztowy</label>
+                                    <input type="text" id="destinationCountry" name="destinationCountry" class="form-control" required>
+                                </div>
+                            </div>
+
+                            <!-- Destination City -->
+                            <div class="form-row mb-4">
+                                <div class="col">
+                                    <!-- Origin city -->
+                                    <label for="destinationCity" class="text-left">Miasto rozładunku</label>
+                                    <input type="text" id="destinationCity" name="destinationCity" class="form-control" required>
+                                </div>
+                            </div>
                             
                             <!-- Destination -->
                             <div class="form-row mb-4">
                                 <div class="col">
                                     <!-- Destination city -->
-                                    <label for="destinationCity" class="text-left">Miejsce rozładunku</label>
-                                    <input type="text" id="destinationCity" name="destinationCity" class="form-control" required>
+                                    <label for="destinationCity" class="text-left">Kraj rozładunku</label>
+                                    <input type="text" id="destinationCity" name="destinationCity" class="form-control" value="<?php echo $l->destination_country; ?>" required>
                                 </div>
                                 <div class="col">
                                     <!-- Destination Country-->
-                                    <label for="destinationCountry">Kraj rozładunku</label>
+                                    <label for="destinationCountry">Kod pocztowy</label>
                                     <input type="text" id="destinationCountry" name="destinationCountry" class="form-control" required>
-                                    <ul class="list-group" id="destinationResult"></ul>
                                 </div>
                             </div>
 
@@ -208,15 +226,34 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['deleteGroup'])){
                             <div class="form-row mb-4">
                                 <div class="col">
                                     <!-- Details weight -->
-                                    <label for="destinationCity" class="text-left">Waga towaru</label>
+                                    <label for="destinationCity" class="text-left">Waga towaru (t)</label>
                                     <input type="text" id="destinationCity" name="destinationCity" class="form-control" required>
                                 </div>
                                 <div class="col">
                                     <!-- Details lenght-->
-                                    <label for="destinationCountry">Długość towaru</label>
+                                    <label for="destinationCountry">Długość towaru (m)</label>
                                     <input type="text" id="destinationCountry" name="destinationCountry" class="form-control" required>
                                     <ul class="list-group" id="destinationResult"></ul>
                                 </div>
+                            </div>
+
+                            <!-- Details -->
+                            <div class="form-row mb-4">
+                                <div class="col">
+                                    <!-- Details trailer -->
+                                    <label for="destinationCity" class="text-left">Rodzaj naczepy</label>
+                                    <select class="browser-default custom-select">
+                                        <option value="1">Plandeka - standard</option>
+                                        <option value="1">Plandeka - mega</option>
+                                        <option value="3">Zestaw 7+7</option>
+                                        <option value="3">Platforma</option>
+                                        <option value="3">Chłodnia</option>
+                                        <option value="2">Izoterma</option>
+                                        <option value="3">Chłodnia</option>
+                                        <option value="3">Coilmulda</option>
+                                    </select>
+                                </div>
+                                <div class="col"></div>
                             </div>
 
                             <div class="text-center"> 

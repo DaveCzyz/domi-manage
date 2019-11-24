@@ -73,4 +73,4 @@ $("#editDestinationResult").on("click","li", liveSearchResult);
 
 
 
-//************* AJAX reusable request for JSON trailers list *************//
+//************* AJAX request for JSON trailers list *************//
