@@ -148,9 +148,9 @@ class Loads{
                 $this->origin_country   = $row['origin_country'];
                 $this->origin_iso       = $row['origin_iso'];
 
-                $this->destination_name = $row['destination_name'];
-                $this->destination_country = $row['destination_country'];
-                $this->destination_iso  = $row['destination_iso'];
+                $this->destination_name     = $row['destination_name'];
+                $this->destination_country  = $row['destination_country'];
+                $this->destination_iso      = $row['destination_iso'];
 
                 $this->active_loads     = $row['active_loads'];
                 $this->related_loads    = $row['related_loads'];
@@ -172,12 +172,16 @@ class Loads{
 
         if($id != "" && $this->id == $id && $load_id != "" && $this->load_id == $load_id){
 
-            $sql = "UPDATE " . self::$db_name . " ";
-            $sql.= "SET customer='" . $this->customer . "', origin_name='". $this->origin_name ."', origin_country='". $this->origin_country . "', ";
-            $sql.= "destination_name='". $this->destination_name . "', destination_country='". $this->destination_country ."' ";
-            $sql.= "WHERE id='". $id . "' AND load_id='". $load_id."' LIMIT 1";
+            // Split country ISO
+            $tmp_originISO      = explode(', ', $this->origin_country);
+            $origin_iso         = $tmp_originISO[1];
+            $tmp_destinationISO = explode(', ', $this->destination_country);
+            $destination_iso    = $tmp_destinationISO[1];
 
-            print_r($sql);
+            $sql = "UPDATE " . self::$db_name . " ";
+            $sql.= "SET customer='" . $this->customer . "', origin_name='". $this->origin_name ."', origin_country='". $this->origin_country . "', origin_iso='".$origin_iso."', ";
+            $sql.= "destination_name='". $this->destination_name . "', destination_country='". $this->destination_country ."', destination_iso='".$destination_iso."' ";
+            $sql.= "WHERE id='". $id . "' AND load_id='". $load_id."' LIMIT 1";
 
             if($db->query($sql)){
                 return true;
@@ -192,13 +196,22 @@ class Loads{
 
 
     // Delete load
-    public static function deleteLoad($id, $loadID){
+    public static function deleteLoad($user_id, $id, $load_id){
         global $db;
-        $tmp_id     = $db->escape_string($id);
-        $tmp_loadID = $db->escape_string($loadID);
 
-        if($tmp_id != "" && $tmp_loadID != ""){
-            return true;
+        $user_id    = $db->escape_string($user_id);
+        $id         = $db->escape_string($id);
+        $load_id    = $db->escape_string($load_id);
+
+        if($user_id != "" && $id != "" && $load_id  != ""){
+            $sql = "DELETE FROM " . self::$db_name . " ";
+            $sql.= "WHERE id='".$id."' AND load_id='".$load_id."' AND user_id='".$user_id."' LIMIT 1";
+
+            if($db->query($sql)){
+                return true;
+            }else{
+                return false;
+            }
 
         }else{
             return false;

@@ -8,6 +8,10 @@ function greatLetter(){
 $("#customerName").on('change', greatLetter);
 $("#originCity").on('change', greatLetter);
 $("#destinationCity").on('change', greatLetter);
+// Form file manage_loads.php
+$("#editCustomer").on('change', greatLetter);
+$("#editOriginName").on('change', greatLetter);
+$("#editDestinationName").on('change', greatLetter);
 
 // end
 
@@ -36,6 +40,9 @@ $("#originCountry").on("keyup", callAjaxLiveSearch);
 // Fields for destination city
 $("#destinationCountry").on("keyup", callAjaxLiveSearch);
 
+// Fields form manage_loads.php
+$("#editOriginCountry").on("keyup", callAjaxLiveSearch);
+$("#editDestinationCountry").on("keyup", callAjaxLiveSearch);
 // end
 
 
@@ -53,5 +60,9 @@ function liveSearchResult(){
 $("#originResult").on("click", "li", liveSearchResult);
 // Fields for destination city
 $("#destinationResult").on("click", "li", liveSearchResult);
+
+// Fields from manage_loads.php
+$("#editOriginResult").on("click", "li", liveSearchResult);
+$("#editDestinationResult").on("click","li", liveSearchResult);
 
 // end
