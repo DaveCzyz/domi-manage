@@ -63,7 +63,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addLoadGroup'])){
             <div class="form-row mb-4">
                 <div class="col">
                     <!-- Customer name -->
-                    <label for="customerName" class="text-left">Nazwa klienta</label>
+                    <label for="customerName" class="text-left">Nazwa klienta / grupy</label>
                     <input type="text" id="customerName" name="customerName" class="form-control" required>
                 </div>
             </div>

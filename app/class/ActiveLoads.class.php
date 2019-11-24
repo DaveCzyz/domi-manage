@@ -4,9 +4,10 @@ use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
 
 class ActiveLoads{
-    protected static $db_name = "active_loads";
+    protected static $db_name = "related_loads";
 
     public $active_load_id;
+    
     public $related_with;
     public $user_id;
 

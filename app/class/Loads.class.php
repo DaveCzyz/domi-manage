@@ -7,17 +7,21 @@ use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
 class Loads{
     protected static $db_name = "loads";
 
+    public $id;
     public $load_id;
     public $user_id;
     public $customer;
 
     public $origin_name;
     public $origin_country;
+    public $origin_iso;
 
     public $destination_name;
     public $destination_country;
+    public $destination_iso;
 
     public $active_loads;
+    public $related_loads;
     // column active_loads in database has default "NO"
 
     public $err = [];
@@ -117,7 +121,8 @@ class Loads{
     }
 
     // Get specify group
-    public static function getOneGroup($id, $load_id, $user_id){
+    public function getOneGroup($id, $load_id, $user_id){
+
         if(empty($id) || empty($load_id) || empty($user_id)){
             return false;
         }
@@ -133,8 +138,28 @@ class Loads{
         $query = $db->query($sql);
 
         if($query->num_rows == 1){
-            $row = $query->fetch_array(MYSQLI_ASSOC);
-            return $row;
+            while($row = $query->fetch_array()){
+                $this->id               = $row['id'];
+                $this->load_id          = $row['load_id'];
+                $this->user_id          = $row['user_id'];
+                $this->customer         = $row['customer'];
+
+                $this->origin_name      = $row['origin_name'];
+                $this->origin_country   = $row['origin_country'];
+                $this->origin_iso       = $row['origin_iso'];
+
+                $this->destination_name = $row['destination_name'];
+                $this->destination_country = $row['destination_country'];
+                $this->destination_iso  = $row['destination_iso'];
+
+                $this->active_loads     = $row['active_loads'];
+                $this->related_loads    = $row['related_loads'];
+            }
+
+            return true;
+
+            // $row = $query->fetch_array(MYSQLI_ASSOC);
+            // return $row;
         }else{
             return false;
         }
@@ -142,9 +167,27 @@ class Loads{
 
 
     // Edit existed load
-    public function editLoad(){
+    public function editLoad($id, $load_id){
+        global $db;
 
+        if($id != "" && $this->id == $id && $load_id != "" && $this->load_id == $load_id){
 
+            $sql = "UPDATE " . self::$db_name . " ";
+            $sql.= "SET customer='" . $this->customer . "', origin_name='". $this->origin_name ."', origin_country='". $this->origin_country . "', ";
+            $sql.= "destination_name='". $this->destination_name . "', destination_country='". $this->destination_country ."' ";
+            $sql.= "WHERE id='". $id . "' AND load_id='". $load_id."' LIMIT 1";
+
+            print_r($sql);
+
+            if($db->query($sql)){
+                return true;
+            }else{
+                return false;
+            }
+
+        }else{
+            return false;
+        }
     }
 
 
