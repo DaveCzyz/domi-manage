@@ -54,6 +54,7 @@ class ActiveLoads{
         }
 
         if(!empty($loadArray)){
+            // JSON format for AJAX request in loads.php
             return json_encode($loadArray);
         }else{
             return false;

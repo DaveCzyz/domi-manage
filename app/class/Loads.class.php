@@ -117,8 +117,27 @@ class Loads{
     }
 
     // Get specify group
-    public static function getOneGroup($id){
+    public static function getOneGroup($id, $load_id, $user_id){
+        if(empty($id) || empty($load_id) || empty($user_id)){
+            return false;
+        }
 
+        global $db;
+
+        $id      = $db->escape_string($id);
+        $load_id = $db->escape_string($load_id);
+        $user_id = $db->escape_string($user_id);
+
+        $sql = "SELECT * FROM " . self::$db_name . " ";
+        $sql.= "WHERE id='".$id."' AND load_id='". $load_id ."' AND user_id='". $user_id ."' LIMIT 1";
+        $query = $db->query($sql);
+
+        if($query->num_rows == 1){
+            $row = $query->fetch_array(MYSQLI_ASSOC);
+            return $row;
+        }else{
+            return false;
+        }
     }
 
 
