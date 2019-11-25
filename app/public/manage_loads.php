@@ -237,7 +237,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['deleteGroup'])){
                                         <option value="3">Coilmulda</option>
                                     </select>
                                 </div>
-                                
+
                                 <!-- empty separator -->
                                 <div class="col"></div>
                             </div>

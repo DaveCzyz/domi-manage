@@ -34,7 +34,7 @@ function callAjaxLiveSearch(postcode){
                 unorderedList.append("<li class='live'>" + value.country + ", " + value.ISO +"</li>");
 
                 if(postcode == true){
-
+                    console.log('elo')
                 }
             }
         })
@@ -55,9 +55,6 @@ $("#loadOriginCountry").on("keyup", callAjaxLiveSearch);
 $("#loadDestinationCountry").on("keyup", callAjaxLiveSearch);
 
 // end
-
-
-
 
 
 //************* Add AJAX result to input *************//
@@ -90,22 +87,39 @@ $("#loadDestinationResult").on("click","li", liveSearchResult);
 
 
 
+
+
+
+
+$("#loadOriginCountry").on("change", function(){
+    var test = $("#loadOriginPostcode");
+    var result = callAjaxPostCode();
+
+
+    console.log(result);
+})
+
+
+
+
 //************* AJAX request for JSON trailers list *************//
-// $.ajaxSetup({ cache: false });
-// function callAjaxLiveSearch(){
-//     // Result list
-//     var unorderedList = $(this).next();
-//         unorderedList.html('');
-//     if($(this).val() == ''){
-//         return
-//     }
-//     var searchField = $(this).val();
-//     var expression  = new RegExp(searchField, "i");
-//     $.getJSON('json/countries_iso_nazwy_polskie.json', function(data){
-//         $.each(data, function(key, value){
-//             if(value.country.search(expression) != -1 || value.ISO.search(expression) != -1){
-//                 unorderedList.append("<li class='live'>" + value.country + ", " + value.ISO +"</li>")
-//             }
-//         })
-//     })
-// }
+$.ajaxSetup({ cache: false });
+function callAjaxPostCode(){
+
+    
+    // // Result list
+    // var unorderedList = $(this).next();
+    //     unorderedList.html('');
+    // if($(this).val() == ''){
+    //     return
+    // }
+    // var searchField = $(this).val();
+    // var expression  = new RegExp(searchField, "i");
+    // $.getJSON('json/countries_iso_nazwy_polskie.json', function(data){
+    //     $.each(data, function(key, value){
+    //         if(value.country.search(expression) != -1 || value.ISO.search(expression) != -1){
+    //             unorderedList.append("<li class='live'>" + value.country + ", " + value.ISO +"</li>")
+    //         }
+    //     })
+    // })
+}
