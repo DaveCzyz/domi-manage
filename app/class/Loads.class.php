@@ -170,6 +170,9 @@ class Loads{
     public function editLoad($id, $load_id){
         global $db;
 
+        $id         = $db->escape_string($id);
+        $load_id    = $db->escape_string($load_id);
+
         if($id != "" && $this->id == $id && $load_id != "" && $this->load_id == $load_id){
 
             // Split country ISO

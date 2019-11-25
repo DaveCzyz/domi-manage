@@ -36,7 +36,7 @@ class ActiveLoads{
 
 
 
-    // Show related loads by main load ID number
+    // Show ALL related loads by main load ID number
     public static function showRelatedLoads($id){
         global $db;
 

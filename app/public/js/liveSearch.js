@@ -12,12 +12,14 @@ $("#destinationCity").on('change', greatLetter);
 $("#editCustomer").on('change', greatLetter);
 $("#editOriginName").on('change', greatLetter);
 $("#editDestinationName").on('change', greatLetter);
+$("#loadOriginCity").on('change', greatLetter);
+$("#loadDestinationCity").on('change', greatLetter);
 
 // end
 
 //************* AJAX reusable request for JSON country list *************//
 $.ajaxSetup({ cache: false });
-function callAjaxLiveSearch(){
+function callAjaxLiveSearch(postcode){
     // Result list
     var unorderedList = $(this).next();
         unorderedList.html('');
@@ -29,7 +31,11 @@ function callAjaxLiveSearch(){
     $.getJSON('json/countries_iso_nazwy_polskie.json', function(data){
         $.each(data, function(key, value){
             if(value.country.search(expression) != -1 || value.ISO.search(expression) != -1){
-                unorderedList.append("<li class='live'>" + value.country + ", " + value.ISO +"</li>")
+                unorderedList.append("<li class='live'>" + value.country + ", " + value.ISO +"</li>");
+
+                if(postcode == true){
+
+                }
             }
         })
     })
@@ -43,7 +49,14 @@ $("#destinationCountry").on("keyup", callAjaxLiveSearch);
 // Fields form manage_loads.php
 $("#editOriginCountry").on("keyup", callAjaxLiveSearch);
 $("#editDestinationCountry").on("keyup", callAjaxLiveSearch);
+
+// Fields from manage_lads.php - for adding new related load
+$("#loadOriginCountry").on("keyup", callAjaxLiveSearch);
+$("#loadDestinationCountry").on("keyup", callAjaxLiveSearch);
+
 // end
+
+
 
 
 
@@ -65,6 +78,10 @@ $("#destinationResult").on("click", "li", liveSearchResult);
 $("#editOriginResult").on("click", "li", liveSearchResult);
 $("#editDestinationResult").on("click","li", liveSearchResult);
 
+// Fields from manage_lads.php - for adding new related load
+$("#loadOriginResult").on("click","li", liveSearchResult);
+$("#loadDestinationResult").on("click","li", liveSearchResult);
+
 // end
 
 
@@ -74,3 +91,21 @@ $("#editDestinationResult").on("click","li", liveSearchResult);
 
 
 //************* AJAX request for JSON trailers list *************//
+// $.ajaxSetup({ cache: false });
+// function callAjaxLiveSearch(){
+//     // Result list
+//     var unorderedList = $(this).next();
+//         unorderedList.html('');
+//     if($(this).val() == ''){
+//         return
+//     }
+//     var searchField = $(this).val();
+//     var expression  = new RegExp(searchField, "i");
+//     $.getJSON('json/countries_iso_nazwy_polskie.json', function(data){
+//         $.each(data, function(key, value){
+//             if(value.country.search(expression) != -1 || value.ISO.search(expression) != -1){
+//                 unorderedList.append("<li class='live'>" + value.country + ", " + value.ISO +"</li>")
+//             }
+//         })
+//     })
+// }

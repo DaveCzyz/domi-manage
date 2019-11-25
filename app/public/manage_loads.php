@@ -17,76 +17,57 @@ $user   = new User();
 $user->getUser($userID);
 
 
-// Read group and related loads 
+// Get group and related loads 
 $relatedLoad = "";
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['editGroup'])){
-    $id      = $_POST['id'];
-    $load_id = $_POST['load_id'];
-    $user_id = $user->id;
-
     $l = new Loads();
-    $l->getOneGroup($id, $load_id, $user_id);
-
+    $l->getOneGroup($_POST['id'], $_POST['load_id'], $user->id);
     if($l->related_loads != 0){
         $relatedLoad = $relatedLoad = json_decode(ActiveLoads::showRelatedLoads($load_id));
     }else{
         $relatedLoad = "";
     }
 }
-
-
 // Save changes
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['saveGroup'])){
     if($_POST['id'] != "" && $_POST['load_id'] != ""){
-        $id         = $_POST['id'];
-        $load_id    = $_POST['load_id'];
-
         $l = new Loads();
-        $l->getOneGroup($id, $load_id, $user->id);
-
+        $l->getOneGroup($_POST['id'], $_POST['load_id'], $user->id);
         $l->customer        = $_POST['customer'];
         $l->origin_name     = $_POST['origin_name'];
         $l->origin_country  = $_POST['origin_country'];
         $l->destination_name    = $_POST['destination_name'];
         $l->destination_country = $_POST['destination_country'];
-
-        $l->editLoad($id, $load_id);
-
+        $l->editLoad($_POST['id'], $_POST['load_id']);
         if($l->related_loads != 0){
-            $relatedLoad = $relatedLoad = json_decode(ActiveLoads::showRelatedLoads($load_id));
-        }
-            
+            $relatedLoad = $relatedLoad = json_decode(ActiveLoads::showRelatedLoads($_POST['load_id']));
+        }  
     }else{
         $session->message("Wystąpił błąd. Spróbuj ponownie", "alert");
         redirect("loads.php");
     }
 }
-
 // Cancel saving changes
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['cancelSaving'])){
     redirect("loads.php");
 }
-
 // Delete group
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['deleteGroup'])){
-    $user_id         = $user->id;
-    $load_id         = $_POST['load_id'];
-    $id              = $_POST['id'];
-
     $l = new Loads();
-    $l->getOneGroup($id, $load_id, $user_id);
+    $l->getOneGroup($_POST['id'], $_POST['load_id'], $user->id);
 
     if($l->related_loads != 0){
-        ActiveLoads::deleteRelatedLoads($user_id, $load_id);
+        ActiveLoads::deleteRelatedLoads($user->id, $_POST['load_id']);
     }
-
-    if(Loads::deleteLoad($user_id, $id, $load_id)){
+    if(Loads::deleteLoad($user->id, $_POST['id'], $_POST['load_id'])){
         $session->message("Grupa została usunięta", "success");
         redirect("loads.php");
     };
-
 }
+// Add new realted load
+// if(){
 
+// };
 
 ?>
 
@@ -102,6 +83,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['deleteGroup'])){
 </div>
 
 <div class="row justify-content-center">
+    <!-- Display form with group of loads -->
     <div class="col-3">
             <!-- Card -->
             <div class="card">
@@ -160,6 +142,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['deleteGroup'])){
             <!-- Card -->
     </div><!-- end col-5 -->
 
+    <!-- Display related loads with group -->
     <div class="col-8">
         <div class="card">
             <div class="card-body">
@@ -179,8 +162,8 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['deleteGroup'])){
                             <div class="form-row mb-4">
                                 <div class="col">
                                     <!-- Origin city -->
-                                    <label for="destinationCity" class="text-left">Miasto załadunku</label>
-                                    <input type="text" id="destinationCity" name="destinationCity" class="form-control" required>
+                                    <label for="loadOriginCity" class="text-left">Miasto załadunku</label>
+                                    <input type="text" id="loadOriginCity" name="loadOriginCity" class="form-control" required>
                                 </div>
                             </div>
 
@@ -188,36 +171,38 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['deleteGroup'])){
                             <div class="form-row mb-4">
                                 <div class="col">
                                     <!-- Origin Country -->
-                                    <label for="destinationCity" class="text-left">Kraj załadunku</label>
-                                    <input type="text" id="destinationCity" name="destinationCity" class="form-control" value="<?php echo $l->origin_country; ?>" required>
+                                    <label for="loadOriginCountry" class="text-left">Kraj załadunku</label>
+                                    <input type="text" id="loadOriginCountry" name="loadOriginCountry" class="form-control" value="<?php echo $l->origin_country; ?>" required>
+                                    <ul class="list-group" id="loadOriginResult"></ul>
                                 </div>
                                 <div class="col">
                                     <!-- Origin Postcode-->
-                                    <label for="destinationCountry">Kod pocztowy</label>
-                                    <input type="text" id="destinationCountry" name="destinationCountry" class="form-control" required>
+                                    <label for="loadOriginPostcode">Kod pocztowy</label>
+                                    <input type="text" id="loadOriginPostcode" name="loadOriginPostcode" class="form-control" required>
                                 </div>
                             </div>
 
                             <!-- Destination City -->
                             <div class="form-row mb-4">
                                 <div class="col">
-                                    <!-- Origin city -->
-                                    <label for="destinationCity" class="text-left">Miasto rozładunku</label>
-                                    <input type="text" id="destinationCity" name="destinationCity" class="form-control" required>
+                                    <!-- Destination city -->
+                                    <label for="loadDestinationCity" class="text-left">Miasto rozładunku</label>
+                                    <input type="text" id="loadDestinationCity" name="loadDestinationCity" class="form-control" required>
                                 </div>
                             </div>
                             
                             <!-- Destination -->
                             <div class="form-row mb-4">
                                 <div class="col">
-                                    <!-- Destination city -->
-                                    <label for="destinationCity" class="text-left">Kraj rozładunku</label>
-                                    <input type="text" id="destinationCity" name="destinationCity" class="form-control" value="<?php echo $l->destination_country; ?>" required>
+                                    <!-- Destination country -->
+                                    <label for="loadDestinationCountry" class="text-left">Kraj rozładunku</label>
+                                    <input type="text" id="loadDestinationCountry" name="loadDestinationCountry" class="form-control" value="<?php echo $l->destination_country; ?>" required>
+                                    <ul class="list-group" id="loadDestinationResult"></ul>
                                 </div>
                                 <div class="col">
-                                    <!-- Destination Country-->
-                                    <label for="destinationCountry">Kod pocztowy</label>
-                                    <input type="text" id="destinationCountry" name="destinationCountry" class="form-control" required>
+                                    <!-- Destination postcode-->
+                                    <label for="loadDestinationPostcode">Kod pocztowy</label>
+                                    <input type="text" id="loadDestinationPostcode" name="loadDestinationPostcode" class="form-control" required>
                                 </div>
                             </div>
 
@@ -226,33 +211,34 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['deleteGroup'])){
                             <div class="form-row mb-4">
                                 <div class="col">
                                     <!-- Details weight -->
-                                    <label for="destinationCity" class="text-left">Waga towaru (t)</label>
-                                    <input type="text" id="destinationCity" name="destinationCity" class="form-control" required>
+                                    <label for="weightDetails" class="text-left">Waga towaru (t)</label>
+                                    <input type="text" id="weightDetails" name="weightDetails" class="form-control" required>
                                 </div>
                                 <div class="col">
                                     <!-- Details lenght-->
-                                    <label for="destinationCountry">Długość towaru (m)</label>
-                                    <input type="text" id="destinationCountry" name="destinationCountry" class="form-control" required>
-                                    <ul class="list-group" id="destinationResult"></ul>
+                                    <label for="lengthDetails">Długość towaru (m)</label>
+                                    <input type="text" id="lengthDetails" name="lengthDetails" class="form-control" required>
                                 </div>
                             </div>
 
                             <!-- Details -->
                             <div class="form-row mb-4">
+
                                 <div class="col">
                                     <!-- Details trailer -->
-                                    <label for="destinationCity" class="text-left">Rodzaj naczepy</label>
-                                    <select class="browser-default custom-select">
+                                    <label for="trailerDetails" class="text-left">Rodzaj naczepy</label>
+                                    <select id="trailerDetails" class="browser-default custom-select">
                                         <option value="1">Plandeka - standard</option>
                                         <option value="1">Plandeka - mega</option>
                                         <option value="3">Zestaw 7+7</option>
                                         <option value="3">Platforma</option>
-                                        <option value="3">Chłodnia</option>
                                         <option value="2">Izoterma</option>
                                         <option value="3">Chłodnia</option>
                                         <option value="3">Coilmulda</option>
                                     </select>
                                 </div>
+                                
+                                <!-- empty separator -->
                                 <div class="col"></div>
                             </div>
 
@@ -266,15 +252,12 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['deleteGroup'])){
                     </div><!-- ned col-4 -->
                 </div><!-- end row -->
 
-
-
-
-
-
+                <!-- If related loads not exists - do not show anythig -->
                 <?php if($relatedLoad == "" && !is_array($relatedLoad)) : ?>
                     <p class="text-center">Brak</p>
                 <?php endif; ?>
             
+                <!-- If related loads exist - display all those load -->
                 <?php if($relatedLoad != "" && is_array($relatedLoad)) : ?>
                     <table class="table table-borderless">
                         <tr>
@@ -315,28 +298,12 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['deleteGroup'])){
 
                     </table>
                 <?php endif; ?>
+
             </div> <!-- end card body -->
         </div><!-- end card -->
     </div><!-- end col-5 -->
 
 </div><!-- end row -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 <script src="js/liveSearch.js"></script>
 <?php require 'footer.php';?>
