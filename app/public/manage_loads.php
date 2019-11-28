@@ -150,7 +150,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['deleteGroup'])){
                 <p class="h4 text-center py-4">Ładunki powiązane z grupą <button id="addNewLoad" class="btn btn-success green darken-1 btn-sm" >Dodaj</button></p>
 
                 <div class="row justify-content-center" id="addNewRelatedLoad">
-                    <div class="col-6">
+                    <div class="col-8">
                         <!-- form for add new load -->
                         <form action="manage_loads.php" method="POST">
                             <p class="h5 mb-4 text-center">Dodaj nowy ładunek</p>
@@ -172,12 +172,12 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['deleteGroup'])){
                                 <div class="col">
                                     <!-- Origin Country -->
                                     <label for="loadOriginCountry" class="text-left">Kraj załadunku</label>
-                                    <input type="text" id="loadOriginCountry" name="loadOriginCountry" class="form-control" value="<?php echo $l->origin_country; ?>" required>
+                                    <input type="text" id="loadOriginCountry" name="loadOriginCountry" class="form-control" required>
                                     <ul class="list-group" id="loadOriginResult"></ul>
                                 </div>
                                 <div class="col">
                                     <!-- Origin Postcode-->
-                                    <label for="loadOriginPostcode">Kod pocztowy</label>
+                                    <label for="loadOriginPostcode">Kod pocztowy <i id="postcodeFormatOrigin"></i></label>
                                     <input type="text" id="loadOriginPostcode" name="loadOriginPostcode" class="form-control" required>
                                 </div>
                             </div>
@@ -196,12 +196,12 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['deleteGroup'])){
                                 <div class="col">
                                     <!-- Destination country -->
                                     <label for="loadDestinationCountry" class="text-left">Kraj rozładunku</label>
-                                    <input type="text" id="loadDestinationCountry" name="loadDestinationCountry" class="form-control" value="<?php echo $l->destination_country; ?>" required>
+                                    <input type="text" id="loadDestinationCountry" name="loadDestinationCountry" class="form-control" required>
                                     <ul class="list-group" id="loadDestinationResult"></ul>
                                 </div>
                                 <div class="col">
                                     <!-- Destination postcode-->
-                                    <label for="loadDestinationPostcode">Kod pocztowy</label>
+                                    <label for="loadDestinationPostcode">Kod pocztowy <i id="postcodeFormatDestination"></i></label>
                                     <input type="text" id="loadDestinationPostcode" name="loadDestinationPostcode" class="form-control" required>
                                 </div>
                             </div>

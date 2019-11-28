@@ -19,7 +19,7 @@ $("#loadDestinationCity").on('change', greatLetter);
 
 //************* AJAX reusable request for JSON country list *************//
 $.ajaxSetup({ cache: false });
-function callAjaxLiveSearch(postcode){
+function callAjaxLiveSearch(){
     // Result list
     var unorderedList = $(this).next();
         unorderedList.html('');
@@ -32,10 +32,7 @@ function callAjaxLiveSearch(postcode){
         $.each(data, function(key, value){
             if(value.country.search(expression) != -1 || value.ISO.search(expression) != -1){
                 unorderedList.append("<li class='live'>" + value.country + ", " + value.ISO +"</li>");
-
-                if(postcode == true){
-                    console.log('elo')
-                }
+                unorderedList.append("<li class='live' style='display:none'>" + value.postcode + "</li>");
             }
         })
     })
@@ -75,51 +72,31 @@ $("#destinationResult").on("click", "li", liveSearchResult);
 $("#editOriginResult").on("click", "li", liveSearchResult);
 $("#editDestinationResult").on("click","li", liveSearchResult);
 
-// Fields from manage_lads.php - for adding new related load
-$("#loadOriginResult").on("click","li", liveSearchResult);
-$("#loadDestinationResult").on("click","li", liveSearchResult);
-
 // end
 
+//************* AJAX request for JSON country list and postcode *************//
+var post;
 
-
-
-
-
-
-
-
-
-
-$("#loadOriginCountry").on("change", function(){
-    var test = $("#loadOriginPostcode");
-    var result = callAjaxPostCode();
-
-
-    console.log(result);
-})
-
-
-
-
-//************* AJAX request for JSON trailers list *************//
-$.ajaxSetup({ cache: false });
-function callAjaxPostCode(){
-
-    
-    // // Result list
-    // var unorderedList = $(this).next();
-    //     unorderedList.html('');
-    // if($(this).val() == ''){
-    //     return
-    // }
-    // var searchField = $(this).val();
-    // var expression  = new RegExp(searchField, "i");
-    // $.getJSON('json/countries_iso_nazwy_polskie.json', function(data){
-    //     $.each(data, function(key, value){
-    //         if(value.country.search(expression) != -1 || value.ISO.search(expression) != -1){
-    //             unorderedList.append("<li class='live'>" + value.country + ", " + value.ISO +"</li>")
-    //         }
-    //     })
-    // })
+function postCodeResultOrigin(){
+    post = $(this).next().html();
+    var resultField = $(this);
+    var resultList  = $(this).parent();
+    var inputField  = resultList.siblings('input');
+    inputField.val(resultField.html());
+    resultList.html('');
+    $("#postcodeFormatOrigin").html("w formacie: " + post)
 }
+
+$("#loadOriginResult").on("click","li", postCodeResultOrigin);
+
+function postCodeResultDestination(){
+    post = $(this).next().html();
+    var resultField = $(this);
+    var resultList  = $(this).parent();
+    var inputField  = resultList.siblings('input');
+    inputField.val(resultField.html());
+    resultList.html('');
+    $("#postcodeFormatDestination").html("w formacie: " + post)
+}
+
+$("#loadDestinationResult").on("click","li", postCodeResultDestination);
