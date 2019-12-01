@@ -16,6 +16,11 @@ $userID = $_SESSION['user_id'];
 $user   = new User();
 $user->getUser($userID);
 
+// Store load_id in session
+if(isset($_SESSION['load_id'])){
+    $l = new Loads();
+    // $l->getOneGroup();
+}
 
 // Get group and related loads 
 $relatedLoad = "";
@@ -23,7 +28,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['editGroup'])){
     $l = new Loads();
     $l->getOneGroup($_POST['id'], $_POST['load_id'], $user->id);
     if($l->related_loads != 0){
-        $relatedLoad = $relatedLoad = json_decode(ActiveLoads::showRelatedLoads($load_id));
+        $relatedLoad = $relatedLoad = json_decode(ActiveLoads::showRelatedLoads($_POST['load_id']));
     }else{
         $relatedLoad = "";
     }
@@ -33,9 +38,9 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['saveGroup'])){
     if($_POST['id'] != "" && $_POST['load_id'] != ""){
         $l = new Loads();
         $l->getOneGroup($_POST['id'], $_POST['load_id'], $user->id);
-        $l->customer        = $_POST['customer'];
-        $l->origin_name     = $_POST['origin_name'];
-        $l->origin_country  = $_POST['origin_country'];
+        $l->customer            = $_POST['customer'];
+        $l->origin_name         = $_POST['origin_name'];
+        $l->origin_country      = $_POST['origin_country'];
         $l->destination_name    = $_POST['destination_name'];
         $l->destination_country = $_POST['destination_country'];
         $l->editLoad($_POST['id'], $_POST['load_id']);
@@ -65,11 +70,40 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['deleteGroup'])){
     };
 }
 // Add new realted load
-// if(){
+if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addNewLoad'])){
+    $l = new Loads();
+    $l->getOneGroup($_POST['id'], $_POST['load_id'], $user->id);
 
-// };
+    $rl = new ActiveLoads($_POST['load_id'], $user->id);
+    // Origin fields
+    $rl->origin_name          = $_POST['loadOriginCity'];
+    $rl->origin_country       = $_POST['loadOriginCountry'];
+    $rl->origin_postcode      = $_POST['loadOriginPostcode'];
+    // Destination fields
+    $rl->destination_name     = $_POST['loadDestinationCity'];
+    $rl->destination_country  = $_POST['loadDestinationCountry'];
+    $rl->destination_postcode = $_POST['loadDestinationPostcode'];
+    // Load details
+    $rl->trailer              = $_POST['trailerDetails'];
+    $rl->weight               = $_POST['weightDetails'];
+    $rl->length               = $_POST['lengthDetails'];
+
+    if($rl->addNewLoad()){
+        $l->updateCounter("plus");
+        $session->message("Ładunek został dodany", "success");
+        redirect("manage_loads.php");
+    }else{
+        $session->message($rl->err[0], "error");
+        redirect("loads.php");
+    }
+};
+
 
 ?>
+
+
+
+
 
 <div class="row justify-content-center">
     <div class="col-10 center">
@@ -149,14 +183,17 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['deleteGroup'])){
                 <!-- Card Title -->
                 <p class="h4 text-center py-4">Ładunki powiązane z grupą <button id="addNewLoad" class="btn btn-success green darken-1 btn-sm" >Dodaj</button></p>
 
-                <div class="row justify-content-center" id="addNewRelatedLoad">
+                <div class="row justify-content-center" id="addNewRelatedLoad" style="display:none">
                     <div class="col-8">
                         <!-- form for add new load -->
                         <form action="manage_loads.php" method="POST">
                             <p class="h5 mb-4 text-center">Dodaj nowy ładunek</p>
 
+                            <!-- Load ID-->
+                            <input type="hidden" name="id" value="<?php echo $l->id; ?>">
+
                             <!-- Realted with-->
-                            <input type="hidden" value="<?php echo $l->load_id; ?>">
+                            <input type="hidden" name="load_id" value="<?php echo $l->load_id; ?>">
 
                             <!-- Origin city -->
                             <div class="form-row mb-4">
@@ -227,14 +264,14 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['deleteGroup'])){
                                 <div class="col">
                                     <!-- Details trailer -->
                                     <label for="trailerDetails" class="text-left">Rodzaj naczepy</label>
-                                    <select id="trailerDetails" class="browser-default custom-select">
+                                    <select id="trailerDetails" name="trailerDetails" class="browser-default custom-select">
                                         <option value="1">Plandeka - standard</option>
-                                        <option value="1">Plandeka - mega</option>
+                                        <option value="2">Plandeka - mega</option>
                                         <option value="3">Zestaw 7+7</option>
-                                        <option value="3">Platforma</option>
-                                        <option value="2">Izoterma</option>
-                                        <option value="3">Chłodnia</option>
-                                        <option value="3">Coilmulda</option>
+                                        <option value="4">Platforma</option>
+                                        <option value="5">Izoterma</option>
+                                        <option value="6">Chłodnia</option>
+                                        <option value="7">Coilmulda</option>
                                     </select>
                                 </div>
 

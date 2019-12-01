@@ -98,14 +98,12 @@ class Loads{
             return false;
         }
     }
-
     // Get all groups from DB
     public static function getGroups($id){
         if(empty($id)){
             $this->err['Brak ładunków do wyświetlenia'];
             return false;
         }
-
         global $db;
         $loads = [];
 
@@ -116,10 +114,8 @@ class Loads{
         while($row = $query->fetch_assoc()){
             $loads[] = $row;
         }
-
         return $loads;
     }
-
     // Get specify group
     public function getOneGroup($id, $load_id, $user_id){
 
@@ -155,17 +151,11 @@ class Loads{
                 $this->active_loads     = $row['active_loads'];
                 $this->related_loads    = $row['related_loads'];
             }
-
             return true;
-
-            // $row = $query->fetch_array(MYSQLI_ASSOC);
-            // return $row;
         }else{
             return false;
         }
     }
-
-
     // Edit existed load
     public function editLoad($id, $load_id){
         global $db;
@@ -196,8 +186,6 @@ class Loads{
             return false;
         }
     }
-
-
     // Delete load
     public static function deleteLoad($user_id, $id, $load_id){
         global $db;
@@ -216,6 +204,36 @@ class Loads{
                 return false;
             }
 
+        }else{
+            return false;
+        }
+    }
+    // Update counter
+    public function updateCounter($n){
+        global $db;
+
+        if(empty($n)){
+            return false;
+        }
+
+        if($n == "plus"){
+            $this->related_loads = $this->related_loads + 1;
+        }
+
+        if($n == "minus"){
+            if($this->related_loads == 0){
+                return false;
+            }
+
+            $this->related_loads = $this->related_loads - 1;
+        }
+
+        $sql = "UPDATE " . self::$db_name . " ";
+        $sql.= "SET related_loads='" . $this->related_loads . "' ";
+        $sql.= "WHERE id='". $this->id . "' AND load_id='". $this->load_id ."' AND user_id='" . $this->user_id . "' LIMIT 1";
+
+        if($db->query($sql)){
+            return true;
         }else{
             return false;
         }
