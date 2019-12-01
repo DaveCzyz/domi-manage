@@ -16,88 +16,115 @@ $userID = $_SESSION['user_id'];
 $user   = new User();
 $user->getUser($userID);
 
-// Store load_id in session
-if(isset($_SESSION['load_id'])){
-    $l = new Loads();
-    // $l->getOneGroup();
-}
-
-// Get group and related loads 
+// Store related loads
 $relatedLoad = "";
+// Get group and related loads 
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['editGroup'])){
     $l = new Loads();
-    $l->getOneGroup($_POST['id'], $_POST['load_id'], $user->id);
-    if($l->related_loads != 0){
-        $relatedLoad = $relatedLoad = json_decode(ActiveLoads::showRelatedLoads($_POST['load_id']));
+    if($l->getOneGroup($_POST['id'], $_POST['load_id'], $user->id)){
+        Session::manageLoads($_POST['id'], $_POST['load_id']);
+        if($l->related_loads != 0){
+            $relatedLoad = $relatedLoad = json_decode(ActiveLoads::showRelatedLoads($_POST['load_id']));
+        }else{
+            $relatedLoad = "";
+        }
     }else{
-        $relatedLoad = "";
+        $session->message("Wystąpił błąd. Spróbuj ponownie", "error");
+        Session::clearManageLoads();
+        redirect("loads.php");
+    }
+}
+// Store load_id in session
+if(isset($_SESSION['load_id']) && isset($_SESSION['load_uuid'])){
+    $id         = $_SESSION['load_id'];
+    $load_id    = $_SESSION['load_uuid'];
+    $l          = new Loads();
+    $l->getOneGroup($id, $load_id, $user->id);
+    if($l->related_loads != 0){
+        $relatedLoad = $relatedLoad = json_decode(ActiveLoads::showRelatedLoads($load_id));
     }
 }
 // Save changes
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['saveGroup'])){
-    if($_POST['id'] != "" && $_POST['load_id'] != ""){
-        $l = new Loads();
-        $l->getOneGroup($_POST['id'], $_POST['load_id'], $user->id);
+    if($_POST['id'] == $l->id && $_POST['load_id'] == $l->load_id){
         $l->customer            = $_POST['customer'];
         $l->origin_name         = $_POST['origin_name'];
         $l->origin_country      = $_POST['origin_country'];
         $l->destination_name    = $_POST['destination_name'];
         $l->destination_country = $_POST['destination_country'];
-        $l->editLoad($_POST['id'], $_POST['load_id']);
-        if($l->related_loads != 0){
-            $relatedLoad = $relatedLoad = json_decode(ActiveLoads::showRelatedLoads($_POST['load_id']));
-        }  
+        if($l->editLoad()){
+            $session->message("Zmiany zostały zapisane", "success");
+            redirect("manage_loads.php");
+        }else{
+            $session->message($this->err[0], "alert");
+            redirect("manage_loads.php");
+        }
     }else{
-        $session->message("Wystąpił błąd. Spróbuj ponownie", "alert");
-        redirect("loads.php");
+        $session->message("Wystąpił błąd. Spróbuj ponownie", "error");
+        redirect("manage_loads.php");
     }
 }
 // Cancel saving changes
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['cancelSaving'])){
+    Session::clearManageLoads();
     redirect("loads.php");
 }
 // Delete group
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['deleteGroup'])){
-    $l = new Loads();
-    $l->getOneGroup($_POST['id'], $_POST['load_id'], $user->id);
-
-    if($l->related_loads != 0){
+    // Delete from button in loads.php
+    if(isset($_POST['id']) && isset($_POST['load_id'])){
         ActiveLoads::deleteRelatedLoads($user->id, $_POST['load_id']);
-    }
-    if(Loads::deleteLoad($user->id, $_POST['id'], $_POST['load_id'])){
+        Loads::deleteLoad($user->id, $_POST['id'], $_POST['load_id']);
+        Session::clearManageLoads();
         $session->message("Grupa została usunięta", "success");
         redirect("loads.php");
-    };
+    }
+    // Delete from button in manage_loads.php
+    if($l->related_loads != 0){
+        ActiveLoads::deleteRelatedLoads($user->id, $l->load_id);
+    } 
+    if(Loads::deleteLoad($user->id, $l->id, $l->load_id)){
+        $session->message("Grupa została usunięta", "success");
+        Session::clearManageLoads();
+        redirect("loads.php");
+    }else{
+        $session->message("Błąd podczas usuwania grupy. Spróbuj ponownie", "error");
+        redirect("manage_loads.php");
+    }
 }
 // Add new realted load
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addNewLoad'])){
-    $l = new Loads();
-    $l->getOneGroup($_POST['id'], $_POST['load_id'], $user->id);
-
-    $rl = new ActiveLoads($_POST['load_id'], $user->id);
-    // Origin fields
-    $rl->origin_name          = $_POST['loadOriginCity'];
-    $rl->origin_country       = $_POST['loadOriginCountry'];
-    $rl->origin_postcode      = $_POST['loadOriginPostcode'];
-    // Destination fields
-    $rl->destination_name     = $_POST['loadDestinationCity'];
-    $rl->destination_country  = $_POST['loadDestinationCountry'];
-    $rl->destination_postcode = $_POST['loadDestinationPostcode'];
-    // Load details
-    $rl->trailer              = $_POST['trailerDetails'];
-    $rl->weight               = $_POST['weightDetails'];
-    $rl->length               = $_POST['lengthDetails'];
-
-    if($rl->addNewLoad()){
-        $l->updateCounter("plus");
-        $session->message("Ładunek został dodany", "success");
-        redirect("manage_loads.php");
-    }else{
-        $session->message($rl->err[0], "error");
-        redirect("loads.php");
-    }
+        $rl = new ActiveLoads($l->load_id, $user->id);
+        // Origin fields
+        $rl->origin_name          = $_POST['loadOriginCity'];
+        $rl->origin_country       = $_POST['loadOriginCountry'];
+        $rl->origin_postcode      = $_POST['loadOriginPostcode'];
+        // Destination fields
+        $rl->destination_name     = $_POST['loadDestinationCity'];
+        $rl->destination_country  = $_POST['loadDestinationCountry'];
+        $rl->destination_postcode = $_POST['loadDestinationPostcode'];
+        // Load details
+        $rl->trailer              = $_POST['trailerDetails'];
+        $rl->weight               = $_POST['weightDetails'];
+        $rl->length               = $_POST['lengthDetails'];
+    
+        if($rl->addNewLoad()){
+            if($l->updateCounter("plus")){
+                $session->message("Ładunek został dodany", "success");
+                redirect("manage_loads.php");          
+            };
+        }else{
+            $session->message($rl->err[0], "error");
+            redirect("manage_loads.php.php");
+        }
 };
 
+// Edit related load
+
+// Delete specify related load
+
+print_r($_SESSION['load_id'] . "<br>");
+print_r($_SESSION['load_uuid']);
 
 ?>
 
@@ -188,13 +215,6 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addNewLoad'])){
                         <!-- form for add new load -->
                         <form action="manage_loads.php" method="POST">
                             <p class="h5 mb-4 text-center">Dodaj nowy ładunek</p>
-
-                            <!-- Load ID-->
-                            <input type="hidden" name="id" value="<?php echo $l->id; ?>">
-
-                            <!-- Realted with-->
-                            <input type="hidden" name="load_id" value="<?php echo $l->load_id; ?>">
-
                             <!-- Origin city -->
                             <div class="form-row mb-4">
                                 <div class="col">
@@ -309,7 +329,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addNewLoad'])){
                         </tr>
                     
                         <?php for($i = 0; $i < count($relatedLoad); ++$i) : ?>
-                            <tr class="border-top">
+                            <tr class="border-top border-bottom">
                                 <th scope="row"><?php echo $i + 1; ?></th>
                                 <td>Załadunek</td>
                                 <td><?php echo $relatedLoad[$i]->origin_name ;?></td>

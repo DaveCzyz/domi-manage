@@ -89,7 +89,16 @@ class Session{
         }
     }
 
+    public static function manageLoads($load_id, $load_uuid){
+        self::clearManageLoads();
+        $_SESSION['load_id']    = $load_id;
+        $_SESSION['load_uuid']  = $load_uuid;
+    }
 
+    public static function clearManageLoads(){
+        unset($_SESSION['load_id']);
+        unset($_SESSION['load_uuid']);
+    }
 
 
 

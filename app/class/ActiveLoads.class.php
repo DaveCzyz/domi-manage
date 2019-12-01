@@ -67,7 +67,6 @@ class ActiveLoads{
     // Delete ALL related loads
     public static function deleteRelatedLoads($user_id, $related_with){
         global $db;
-
         if($user_id != "" && $related_with != ""){
             $sql = "DELETE FROM " . self::$db_name . " ";
             $sql.= "WHERE related_with='". $related_with . "' AND user_id='" . $user_id . "' ";
@@ -77,7 +76,6 @@ class ActiveLoads{
             }else{
                 return false;
             }
-
         }else{
             return false;
         }

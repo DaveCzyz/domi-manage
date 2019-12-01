@@ -41,6 +41,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addLoadGroup'])){
 
 ?>
 
+<!-- Page tittle and system message -->
 <div class="row justify-content-center">
     <div class="col-10 center">
         <h3 class="text-center">Zarządzaj bieżącymi ładunkami</h3>
@@ -52,129 +53,134 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addLoadGroup'])){
     </div>
 </div>
 
+<!-- Add new group of loads -->
 <div class="row justify-content-center" id="loadGroup" style="display:none">
     <div class="col-8">
-        <!-- Loads group form -->
-        <form class="border border-light p-5" action="loads.php" method="POST">
+        <div class="card">
+            <div class="card-body">
+                <!-- Loads group form -->
+                <form action="loads.php" method="POST">
 
-            <p class="h4 mb-4 text-center">Dodaj nową grupę ładunków</p>
+                    <p class="h4 mb-4 text-center">Dodaj nową grupę ładunków</p>
 
-            <!-- Customer -->
-            <div class="form-row mb-4">
-                <div class="col">
-                    <!-- Customer name -->
-                    <label for="customerName" class="text-left">Nazwa klienta / grupy</label>
-                    <input type="text" id="customerName" name="customerName" class="form-control" required>
-                </div>
+                    <!-- Customer -->
+                    <div class="form-row mb-4">
+                        <div class="col">
+                            <!-- Customer name -->
+                            <label for="customerName" class="text-left">Nazwa klienta / grupy</label>
+                            <input type="text" id="customerName" name="customerName" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <!-- Origin -->
+                    <div class="form-row mb-4">
+                        <div class="col">
+                            <!-- Origin City -->
+                            <label for="originCity" class="text-left">Miejsce załadunku</label>
+                            <input type="text" id="originCity" name="originCity" class="form-control" required>
+                        </div>
+                        <div class="col">
+                            <!-- Origin country -->
+                            <label for="originCountry">Kraj załadunku</label>
+                            <input type="text" id="originCountry" name="originCountry" class="form-control" required>
+                            <ul class="list-group" id="originResult"></ul>
+                        </div>
+                    </div>
+
+                    <!-- Destination -->
+                    <div class="form-row mb-4">
+                        <div class="col">
+                            <!-- Destination city -->
+                            <label for="destinationCity" class="text-left">Miejsce rozładunku</label>
+                            <input type="text" id="destinationCity" name="destinationCity" class="form-control" required>
+                        </div>
+                        <div class="col">
+                            <!-- Destination Country-->
+                            <label for="destinationCountry">Kraj rozładunku</label>
+                            <input type="text" id="destinationCountry" name="destinationCountry" class="form-control" required>
+                            <ul class="list-group" id="destinationResult"></ul>
+                        </div>
+                    </div>
+
+                    <div class="form-row mb-4">
+                        <div class="col-6 text-right">
+                            <input class="btn btn-warning warning-color btn-block my-4" id="cancelLoadGroup" type="button" value="Anuluj">
+                        </div>
+                        <div class="col-6">
+                            <input class="btn btn-success green darken-1 btn-block my-4" id="addLoadGroup" name="addLoadGroup" type="submit" value="Dodaj">
+                        </div>
+                    </div>
+
+                </form>
+                <!-- Loads group form -->
             </div>
-
-            <!-- Origin -->
-            <div class="form-row mb-4">
-                <div class="col">
-                    <!-- Origin City -->
-                    <label for="originCity" class="text-left">Miejsce załadunku</label>
-                    <input type="text" id="originCity" name="originCity" class="form-control" required>
-                </div>
-                <div class="col">
-                    <!-- Origin country -->
-                    <label for="originCountry">Kraj załadunku</label>
-                    <input type="text" id="originCountry" name="originCountry" class="form-control" required>
-                    <ul class="list-group" id="originResult"></ul>
-                </div>
-            </div>
-
-            <!-- Destination -->
-            <div class="form-row mb-4">
-                <div class="col">
-                    <!-- Destination city -->
-                    <label for="destinationCity" class="text-left">Miejsce rozładunku</label>
-                    <input type="text" id="destinationCity" name="destinationCity" class="form-control" required>
-                </div>
-                <div class="col">
-                    <!-- Destination Country-->
-                    <label for="destinationCountry">Kraj rozładunku</label>
-                    <input type="text" id="destinationCountry" name="destinationCountry" class="form-control" required>
-                    <ul class="list-group" id="destinationResult"></ul>
-                </div>
-            </div>
-
-            <div class="form-row mb-4">
-                <div class="col-6 text-right">
-                    <input class="btn btn-warning warning-color btn-block my-4" id="cancelLoadGroup" type="button" value="Anuluj">
-                </div>
-                <div class="col-6">
-                    <input class="btn btn-success green darken-1 btn-block my-4" id="addLoadGroup" name="addLoadGroup" type="submit" value="Dodaj">
-                </div>
-            </div>
-
-        </form>
-        <!-- Loads group form -->
+        </div>
     </div>
 </div><!-- end -->
 
-<!-- Add new group of loads -->
+<!-- Add new group button -->
 <div class="row justify-content-center">
     <div class="col-3 text-center">
         <button type="button" id="addNewLoadGroup" class="btn btn-success green darken-1">Dodaj grupę</button>
     </div>
 </div><!-- end-->
 
-
-
-
-
-
-
-
-<!-- Display avaiable loads-->
+<!-- Display all loads-->
 <div class="row justify-content-center">
-    <div class="col-5 border">
-        <!-- Column tittle -->
-        <h4>Grupy ładunków</h4>
 
-        <?php foreach($groupLoads as $key => $value): ?>
-            <form method="POST" action="manage_loads.php">
-                <!-- Hidden input for ID -->
-                <input type="hidden" name="id" value="<?php echo $value['id'];?>">
-                <!-- Hidden input for load ID -->
-                <input type="hidden" name="load_id" value="<?php echo $value['load_id'];?>">
+    <!-- Display all groups of loads -->
+    <div class="col-5">
+        <div class="card">
+            <div class="card-body">
+                <!-- Column tittle -->
+                <p class="h4 text-center py-2">Grupy ładunków</p>
 
-                <!-- Load group card -->
-                <div class="card">
-                    <!-- Load group customer name-->
-                    <div class="card-header green darken-1 text-white">
-                        <?php echo $value['customer']; ?>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title"><?php echo $value['origin_name']; ?> - <?php echo $value['destination_name']; ?></h5>
-                        <i class="card-text"><?php echo $value['origin_country']; ?> <span class="flag-icon flag-icon-<?php echo strtolower($value['origin_iso']); ?>"></span> - <?php echo $value['destination_country']; ?> <span class="flag-icon flag-icon-<?php echo strtolower($value['destination_iso']); ?>"></span></i>
-                        <br>
-                        <input type="submit" name="addGroup" class="btn btn-success green darken-1 btn-sm" value="Wystaw">
-                        <input type="submit" name="editGroup" class="btn btn-success green darken-1 btn-sm" value="Edytuj">
-                        <a href="" id="seeMore" data-loadID="<?php echo $value['load_id'];?>" class="btn btn-success green darken-1 btn-sm">Rozwiń (<?php echo $value['related_loads']; ?>)</a>
-                        <input type="submit" name="deleteGroup" class="btn btn-danger btn-sm" onclick="return confirm('Czy napewno chcesz usunąć wybraną grupę ładunków? Zmian nie można cofnąć.');" value="Usuń">
-                    </div>
-                    <ul style="display:none" id="group-<?php echo $value['load_id'];?>"></ul>
-                </div>
-            </form>
-        <?php endforeach; ?>
-    </div>
+                <?php foreach($groupLoads as $key => $value): ?>
+                    <form method="POST" action="manage_loads.php">
+                        <!-- Hidden input for ID -->
+                        <input type="hidden" name="id" value="<?php echo $value['id'];?>">
+                        <!-- Hidden input for load ID -->
+                        <input type="hidden" name="load_id" value="<?php echo $value['load_id'];?>">
 
-
-
-
-
-
-
-
+                        <!-- Load group card -->
+                        <div class="card">
+                            <!-- Load group customer name-->
+                            <div class="card-header green darken-1 text-white">
+                                <?php echo $value['customer']; ?>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title"><?php echo $value['origin_name']; ?> - <?php echo $value['destination_name']; ?></h5>
+                                <i class="card-text"><span class="flag-icon flag-icon-<?php echo strtolower($value['origin_iso']); ?>"></span> <?php echo $value['origin_country']; ?> - <span class="flag-icon flag-icon-<?php echo strtolower($value['destination_iso']); ?>"></span> <?php echo $value['destination_country']; ?></i>
+                                <br>
+                                <input type="submit" name="addGroup" class="btn btn-success green darken-1 btn-sm" value="Wystaw">
+                                <input type="submit" name="editGroup" class="btn btn-success green darken-1 btn-sm" value="Edytuj">
+                                <a href="" id="seeMore" data-loadID="<?php echo $value['load_id'];?>" class="btn btn-success green darken-1 btn-sm">Rozwiń (<?php echo $value['related_loads']; ?>)</a>
+                                <input type="submit" name="deleteGroup" class="btn btn-danger btn-sm" onclick="return confirm('Czy napewno chcesz usunąć wybraną grupę ładunków? Zmian nie można cofnąć.');" value="Usuń">
+                            </div>
+                            <ul style="display:none" id="group-<?php echo $value['load_id'];?>"></ul>
+                        </div>
+                    </form>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div><!-- end -->
 
 
 
 
 
 
+
+
+
+
+
+
+
+    <!-- Break -->
     <div class="col-1"></div>
 
+    <!-- Dispaly All active loads -->
     <div class="col-5 border">
         <h4>Twoje aktywne ładunki</h4>
     </div>

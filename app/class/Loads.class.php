@@ -157,14 +157,10 @@ class Loads{
         }
     }
     // Edit existed load
-    public function editLoad($id, $load_id){
+    public function editLoad(){
         global $db;
 
-        $id         = $db->escape_string($id);
-        $load_id    = $db->escape_string($load_id);
-
-        if($id != "" && $this->id == $id && $load_id != "" && $this->load_id == $load_id){
-
+        if($this->id != "" && $this->load_id != ""){
             // Split country ISO
             $tmp_originISO      = explode(', ', $this->origin_country);
             $origin_iso         = $tmp_originISO[1];
@@ -174,15 +170,17 @@ class Loads{
             $sql = "UPDATE " . self::$db_name . " ";
             $sql.= "SET customer='" . $this->customer . "', origin_name='". $this->origin_name ."', origin_country='". $this->origin_country . "', origin_iso='".$origin_iso."', ";
             $sql.= "destination_name='". $this->destination_name . "', destination_country='". $this->destination_country ."', destination_iso='".$destination_iso."' ";
-            $sql.= "WHERE id='". $id . "' AND load_id='". $load_id."' LIMIT 1";
+            $sql.= "WHERE id='". $this->id . "' AND load_id='". $this->load_id."' LIMIT 1";
 
             if($db->query($sql)){
                 return true;
             }else{
+                $this->err[] = "Błąd zapytania SQL. Spróbuj ponownie";
                 return false;
             }
 
         }else{
+            $this->err[] = "Wystąpił błąd. Spróbuj ponownie";
             return false;
         }
     }
@@ -203,7 +201,6 @@ class Loads{
             }else{
                 return false;
             }
-
         }else{
             return false;
         }
