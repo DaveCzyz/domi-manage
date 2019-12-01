@@ -81,8 +81,21 @@ class ActiveLoads{
         }
     }
     // Delete specified related load
-    public function deleteOneLoad(){
-
+    public static function deleteOneLoad($user_id, $load_id){
+        if(!empty($user_id) && !empty($load_id)){
+            global $db;
+            $user_id = $db->escape_string($user_id);
+            $load_id = $db->escape_string($load_id);
+            $sql = "DELETE FROM " . self::$db_name . " ";
+            $sql.= "WHERE  load_id='". $load_id ."' AND user_id='".$user_id."' LIMIT 1";
+            if($db->query($sql)){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
     }
     // Add new load
     public function addNewLoad(){
@@ -148,6 +161,16 @@ class ActiveLoads{
             $this->err[] = "Wystpąpił błąd. Spróbuj ponownie";
             return false;
         }
+    }
+    // Edit load
+    public function editLoad(){
+
+
+    }
+    // Show one specified load
+    public function showOneRelatedLoad(){
+
+        
     }
 }
 

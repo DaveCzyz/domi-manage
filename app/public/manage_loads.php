@@ -118,13 +118,27 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addNewLoad'])){
             redirect("manage_loads.php.php");
         }
 };
-
-// Edit related load
-
 // Delete specify related load
+if(isset($_GET['delete'])){
+    $load_id = $_GET['delete'];
+    if(ActiveLoads::deleteOneLoad($user->id, $load_id)){
+        if($l->updateCounter("minus")){
+            $session->message("Ładunek został usunuęty", "success");
+            redirect("manage_loads.php");
+        }
+    }else{
+        $session->message("Wystąpił błąd poczas usuwania", "error");
+        redirect("manage_loads.php.php");
+    }
+}
 
-print_r($_SESSION['load_id'] . "<br>");
-print_r($_SESSION['load_uuid']);
+// Edit specify related load
+if(isset($_GET['edit'])){
+    $load_id = $_GET['edit'];
+
+    // przeniesc to do formularza z dodawaniem nowego ladunku
+}
+
 
 ?>
 
@@ -316,44 +330,46 @@ print_r($_SESSION['load_uuid']);
             
                 <!-- If related loads exist - display all those load -->
                 <?php if($relatedLoad != "" && is_array($relatedLoad)) : ?>
-                    <table class="table table-borderless">
-                        <tr>
-                            <th>Lp.</th>
-                            <th>Zał./Rozł.</th>
-                            <th>Miasto</th>
-                            <th>Kod pocztowy</th>
-                            <th>Kraj</th>
-                            <th>Naczepa</th>
-                            <th>Waga</th>
-                            <th>LDM</th>
-                        </tr>
-                    
-                        <?php for($i = 0; $i < count($relatedLoad); ++$i) : ?>
-                            <tr class="border-top border-bottom">
-                                <th scope="row"><?php echo $i + 1; ?></th>
-                                <td>Załadunek</td>
-                                <td><?php echo $relatedLoad[$i]->origin_name ;?></td>
-                                <td><?php echo $relatedLoad[$i]->origin_postcode ;?></td>
-                                <td><?php echo $relatedLoad[$i]->origin_country ;?></td>     
-                                <td><?php echo $relatedLoad[$i]->trailer ;?></td>                           
-                                <td><?php echo $relatedLoad[$i]->weight . " t" ;?></td>
-                                <td><?php echo $relatedLoad[$i]->length . " m" ;?></td>
-                            </tr>
-                            <tr>
-                            <th scope="row"></th>
-                                <td>Rozładunek</td>
-                                <td><?php echo $relatedLoad[$i]->destination_name ;?></td>
-                                <td><?php echo $relatedLoad[$i]->destination_postcode ;?></td>
-                                <td><?php echo $relatedLoad[$i]->destination_country ;?></td>  
-                            </tr>
-                            <tr>
-                                <th scope="row"></th>
-                                <td><a class=" btn btn-success green darken-1 btn-sm">Edytuj</a></td>
-                                <td><a class=" btn btn-danger btn-sm">Usuń</a></td>
-                            </tr>
-                        <?php endfor; ?>
 
-                    </table>
+                        <table class="table table-borderless">
+                            <tr>
+                                <th>Lp.</th>
+                                <th>Zał./Rozł.</th>
+                                <th>Miasto</th>
+                                <th>Kod pocztowy</th>
+                                <th>Kraj</th>
+                                <th>Naczepa</th>
+                                <th>Waga</th>
+                                <th>LDM</th>
+                            </tr>
+                        
+                            <?php for($i = 0; $i < count($relatedLoad); ++$i) : ?>
+                                <tr class="border-top border-bottom">
+                                    <th scope="row"><?php echo $i + 1; ?></th>
+                                    <td>Załadunek</td>
+                                    <td><?php echo $relatedLoad[$i]->origin_name ;?></td>
+                                    <td><?php echo $relatedLoad[$i]->origin_postcode ;?></td>
+                                    <td><?php echo $relatedLoad[$i]->origin_country ;?></td>     
+                                    <td><?php echo $relatedLoad[$i]->trailer ;?></td>                           
+                                    <td><?php echo $relatedLoad[$i]->weight . " t" ;?></td>
+                                    <td><?php echo $relatedLoad[$i]->length . " m" ;?></td>
+                                </tr>
+                                <tr>
+                                <th scope="row"></th>
+                                    <td>Rozładunek</td>
+                                    <td><?php echo $relatedLoad[$i]->destination_name ;?></td>
+                                    <td><?php echo $relatedLoad[$i]->destination_postcode ;?></td>
+                                    <td><?php echo $relatedLoad[$i]->destination_country ;?></td>  
+                                </tr>
+                                <tr>
+                                    <th scope="row"></th>
+                                    <td><a href="manage_loads.php?edit=<?php echo $relatedLoad[$i]->load_id ;?>" class="btn btn-success green darken-1 btn-sm">Edytuj</a></td>
+                                    <td><a href="manage_loads.php?delete=<?php echo $relatedLoad[$i]->load_id ;?>" class="btn btn-danger btn-sm">Usuń</a></td>
+                                </tr>
+                            <?php endfor; ?>
+
+                        </table>
+
                 <?php endif; ?>
 
             </div> <!-- end card body -->

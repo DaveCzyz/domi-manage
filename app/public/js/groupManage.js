@@ -1,6 +1,6 @@
 var counter = 0;
 
-$("#seeMore").click(function(event){
+$(".seeMore").click(function(event){
     event.preventDefault();
     var loadID = $(this).attr('data-loadID');
     var parent = $("#group-"+loadID);
