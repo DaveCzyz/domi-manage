@@ -41,6 +41,13 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addLoadGroup'])){
 
 ?>
 
+<?php if($user->trans_id == "") : ?>
+    <div class="alert alert-danger text-center" role="alert">
+        Twoje konto nie jest połączone z platformą Trans. <br>
+        Nie możesz wystawiać ładunków. Przejdz do panelu użytkownika.
+    </div>
+<?php endif; ?>
+
 <!-- Page tittle and system message -->
 <div class="row justify-content-center">
     <div class="col-10 center">
@@ -176,7 +183,6 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addLoadGroup'])){
     </div>
 
 </div><!-- end-->
-
 
 
 

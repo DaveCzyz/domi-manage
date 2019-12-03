@@ -30,7 +30,20 @@ $("#cancelLoadGroup").click(function(){
 $("#addNewLoad").click(function(){
     $("#addNewRelatedLoad").slideToggle("fast");
 });
+// Clear all inputs and toggle form
 $("#cancelNewLoad").click(function(e){
     e.preventDefault();
     $("#addNewRelatedLoad").slideToggle("fast");
+
+    $("#loadOriginCity").val('');
+    $("#loadOriginCountry").val('');
+    $("#loadOriginPostcode").val('');
+    $("#postcodeFormatOrigin").html('');
+    $("#loadDestinationCity").val('');
+    $("#loadDestinationCountry").val('');
+    $("#loadDestinationPostcode").val('');
+    $("#postcodeFormatDestination").html('');
+    $("#weightDetails").val('');
+    $("#lengthDetails").val('');
 });
+

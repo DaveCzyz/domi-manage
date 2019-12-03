@@ -164,14 +164,119 @@ class ActiveLoads{
     }
     // Edit load
     public function editLoad(){
+        global $db;
 
+        $this->origin_name      = $db->escape_string($this->origin_name);
+        $this->origin_country   = $db->escape_string($this->origin_country);
+        $this->origin_postcode  = $db->escape_string($this->origin_postcode);
+
+        $this->destination_name     = $db->escape_string($this->destination_name);
+        $this->destination_country  = $db->escape_string($this->destination_country);
+        $this->destination_postcode = $db->escape_string($this->destination_postcode);
+
+        $this->trailer  = $db->escape_string($this->trailer);
+        $this->weight   = $db->escape_string($this->weight);
+        $this->length   = $db->escape_string($this->length);
+
+        // Validate variables
+        if($this->related_with == ""){
+            $this->err[] = "Wystpąpił błąd. Spróbuj ponownie";
+        }
+        if($this->user_id == "" || $this->user_id == 0){
+            $this->err[] = "Wystpąpił błąd. Spróbuj ponownie";
+        }
+        if($this->origin_name == "" || $this->origin_country == "" || $this->origin_postcode == ""){
+            $this->err[] = "Wprowadź miejsce załadunku";
+        }
+        if($this->destination_name == "" || $this->destination_country == "" || $this->destination_postcode == ""){
+            $this->err[] = "Wprowadź miejsce rozładunku";
+        }
+        if($this->trailer == "" || $this->weight == "" || $this->length == ""){
+            $this->err[] = "Wprowadź szczegóły ładunku";
+        }
+
+        // Split country and iso
+        $tmp_origin_iso = explode(", ", $this->origin_country);
+        $this->origin_country = $tmp_origin_iso[0];
+        $this->origin_iso     = $tmp_origin_iso[1];
+
+        $tmp_destinatio_iso         = explode(", ", $this->destination_country);
+        $this->destination_country  = $tmp_destinatio_iso[0];
+        $this->destination_iso      = $tmp_destinatio_iso[1];
+
+        // Change comma for dot
+        $tmp_weight     = str_replace(",", ".", $this->weight);
+        $this->weight   = $tmp_weight;
+        $tmp_length     = str_replace(",", ".", $this->length);
+        $this->length   = $tmp_length;
+
+        // Save changes into database
+        if(empty($this->err)){
+            $sql = "UPDATE " . self::$db_name . " ";
+            $sql.= "SET origin_name='". $this->origin_name ."', origin_country='". $this->origin_country ."', origin_iso='". $this->origin_iso ."', origin_postcode='".$this->origin_postcode."', ";
+            $sql.= "destination_name='". $this->destination_name ."', destination_country='". $this->destination_country ."', destination_iso='". $this->destination_iso ."', destination_postcode='". $this->destination_postcode ."', ";
+            $sql.= "trailer='". $this->trailer ."', weight='".$this->weight."', length='".$this->length."' ";
+            $sql.= "WHERE load_id='".$this->load_id."' AND user_id='".$this->user_id."' LIMIT 1";
+
+            if($db->query($sql)){
+                return true;
+            }else{
+                $this->err[] = "Wystąpił błąd połączenia z bazą danych";
+                return false;
+            }
+
+        }else{
+            $this->err[] = "Wystąpił błąd. Spróbuj ponownie";
+            return false;
+        }
 
     }
     // Show one specified load
-    public function showOneRelatedLoad(){
+    public function showOneRelatedLoad($load_id, $user_id){
+        global $db;
+        $load_id    = $db->escape_string($load_id);
+        $user_id    = $user_id;
+        if($load_id != "" && $user_id != ""){
+            $sql = "SELECT * FROM " . self::$db_name . " ";
+            $sql.= "WHERE load_id='". $load_id . "' AND user_id='".$user_id."' LIMIT 1";
+            $query = $db->query($sql);
+            if($query->num_rows == 1){
+                while($row = $query->fetch_assoc()){
+                    $this->load_id      = $row['load_id'];
+                    $this->related_with = $row['related_with'];
+                    $this->user_id      = $row['user_id'];
 
-        
+                    $this->origin_name      = $row['origin_name'];
+                    $this->origin_country   = $row['origin_country'];
+                    $this->origin_iso       = $row['origin_iso'];
+                    $this->origin_postcode  = $row['origin_postcode'];
+
+                    $this->destination_name     = $row['destination_name'];
+                    $this->destination_country  = $row['destination_country'];
+                    $this->destination_iso      = $row['destination_iso'];
+                    $this->destination_postcode = $row['destination_postcode'];
+
+                    $this->trailer  = $row['trailer'];
+                    $this->weight   = $row['weight'];
+                    $this->length   = $row['length'];
+                }
+
+                return true;
+
+            }else{
+                $this->err[] = "Nie znaleziono ładunku";
+                return false;
+            }
+        }else{
+            $this->err[] = "Nie znaleziono ładunku";
+            return false;
+        }
     }
+
+
+
+
+
 }
 
 ?>
