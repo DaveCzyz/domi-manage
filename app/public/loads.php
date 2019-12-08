@@ -38,9 +38,32 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addLoadGroup'])){
         redirect("loads.php"); 
     }
 }
+// Filtr groups
+if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['sortGroups'])){
+    $conditions = [$_POST['filtr_customer'], $_POST['filtr_origin_country'], $_POST['filtr_destination_country']];
+    $tmp_arr = $groupLoads;
+    for($i = 0; $i < count($conditions); $i++){
+        if($conditions[$i] != "all"){
+            $cust = $tmp_arr;
+            unset($tmp_arr);
+            foreach($cust as $key => $value){
+                if(array_search($conditions[$i], $value)){
+                    $tmp_arr[] = $value;
+                }
+            }
+        }
+    }
+    if(empty($tmp_arr)){
+        echo "brak wyników";
+    }else{
+        $groupLoads = $tmp_arr;
+    }
+}
+
 
 ?>
 
+<!-- Notification for not connected account with Trans platform -->
 <?php if($user->trans_id == "") : ?>
     <div class="alert alert-danger text-center" role="alert">
         Twoje konto nie jest połączone z platformą Trans. <br>
@@ -133,7 +156,42 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addLoadGroup'])){
         <div class="card">
             <div class="card-body">
                 <!-- Column tittle -->
-                <p class="h4 text-center py-2">Grupy ładunków</p>
+                <p class="h4 text-center py-2">Grupy ładunków <button class="btn btn-success green darken-1 btn-sm">Filtruj</button></p>
+
+                    <!-- Sort groups -->
+                    <form action="loads.php" method="POST">
+
+                        <!-- Sort groups by customer name -->
+                        <label for="sortGroupsByCustomer">Sortuj po - nazwa grupy</label>
+                        <select name="filtr_customer" id="sortGroupsByCustomer" class="browser-default custom-select">
+                            <option value="all">Wszystkie</option>
+                            <?php foreach($groupLoads as $key => $value) : ?>
+                                <option value="<?php echo $value['customer']; ?>"> <?php echo $value['customer']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        
+                        <!-- Sort groups by origin country -->
+                        <label for="sortGroupsByOriginCountry">Sortuj po - kraj załadunku</label>
+                        <select name="filtr_origin_country" id="sortGroupsByOriginCountry" class="browser-default custom-select">
+                            <option value="all">Wszystkie</option>
+                            <?php foreach($groupLoads as $key => $value) : ?>
+                                <option value="<?php echo $value['origin_country']; ?>"> <?php echo $value['origin_country']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+
+                        <!-- Sort groups by destination country -->
+                        <label for="sortGroupsByDestinationCountry">Sortuj po - kraj rozładunku</label>
+                        <select name="filtr_destination_country" id="sortGroupsByDestinationCountry" class="browser-default custom-select">
+                            <option value="all">Wszystkie</option>
+                            <?php foreach($groupLoads as $key => $value) : ?>
+                                <option value="<?php echo $value['destination_country']; ?>"> <?php echo $value['destination_country']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+
+                        <input type="submit" name="sortGroups" class="btn btn-success green darken-1 btn-sm" value="Szukaj">
+
+                    </form> <!-- end sort groups -->
+
                 <?php if(!empty($groupLoads)) : ?>
                 
                     <?php foreach($groupLoads as $key => $value): ?>

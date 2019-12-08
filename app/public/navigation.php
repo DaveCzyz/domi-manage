@@ -25,6 +25,10 @@
           <a class="nav-link" href="carriers.php">Baza przewoźników</a>
         </li>
 
+        <li class="nav-item <?php if(basename($_SERVER['PHP_SELF']) == "messages.php"){ echo "active"; } ?>">
+          <a class="nav-link" href="messages.php">Bramka SMS</a>
+        </li>
+
         <li class="nav-item <?php if(basename($_SERVER['PHP_SELF']) == "loads.php"){ echo "active"; } ?>">
           <a class="nav-link" href="loads.php">Ładunki</a>
         </li>

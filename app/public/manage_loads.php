@@ -78,18 +78,20 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['deleteGroup'])){
         Session::clearManageLoads();
         $session->message("Grupa została usunięta", "success");
         redirect("loads.php");
-    }
-    // Delete from button in manage_loads.php
-    if($l->related_loads != 0){
-        ActiveLoads::deleteRelatedLoads($user->id, $l->load_id);
-    } 
-    if(Loads::deleteLoad($user->id, $l->id, $l->load_id)){
-        $session->message("Grupa została usunięta", "success");
-        Session::clearManageLoads();
-        redirect("loads.php");
+
     }else{
-        $session->message("Błąd podczas usuwania grupy. Spróbuj ponownie", "error");
-        redirect("manage_loads.php");
+        // Delete from button in manage_loads.php
+        if($l->related_loads != 0){
+            ActiveLoads::deleteRelatedLoads($user->id, $l->load_id);
+        } 
+        if(Loads::deleteLoad($user->id, $l->id, $l->load_id)){
+            $session->message("Grupa została usunięta", "success");
+            Session::clearManageLoads();
+            redirect("loads.php");
+        }else{
+            $session->message("Błąd podczas usuwania grupy. Spróbuj ponownie", "error");
+            redirect("manage_loads.php");
+        }
     }
 }
 // Add new realted load
@@ -268,6 +270,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['cancelSaveChanges'])){
                     <?php endif; ?>
                 </p>
 
+                <!-- Add / Edit new related load -->
                 <div class="row justify-content-center" id="addNewRelatedLoad" <?php if(!isset($_GET['edit'])){ echo "style='display:none'"; } ?> >
                     <div class="col-8">
                         <!-- form for add new load -->
