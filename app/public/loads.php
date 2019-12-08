@@ -54,13 +54,11 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['sortGroups'])){
         }
     }
     if(empty($tmp_arr)){
-        echo "brak wyników";
+        $groupLoads = [];
     }else{
         $groupLoads = $tmp_arr;
     }
 }
-
-
 ?>
 
 <!-- Notification for not connected account with Trans platform -->
@@ -85,7 +83,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['sortGroups'])){
 
 <!-- Add new group of loads -->
 <div class="row justify-content-center" id="loadGroup" style="display:none">
-    <div class="col-5">
+    <div class="col-8">
         <div class="card">
             <div class="card-body">
                 <!-- Loads group form -->
@@ -99,6 +97,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['sortGroups'])){
                             <!-- Customer name -->
                             <label for="customerName" class="text-left">Nazwa klienta / grupy</label>
                             <input type="text" id="customerName" name="customerName" class="form-control" required>
+                            <ul class="list-group" id="customerResult"></ul>
                         </div>
                     </div>
 

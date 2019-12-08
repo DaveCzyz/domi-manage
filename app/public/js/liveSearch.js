@@ -100,3 +100,38 @@ function postCodeResultDestination(){
 }
 
 $("#loadDestinationResult").on("click","li", postCodeResultDestination);
+
+// end
+
+//************* AJAX live serach request for customer input *************//
+function callForCustomer(){
+    // Result list
+    var unorderedList = $(this).next();
+    unorderedList.html('');
+    if($(this).val() == ''){
+        return
+    }
+    var searchField = $(this).val();
+    var expression  = new RegExp(searchField, "i");
+
+    $.ajaxSetup({ cache: true });
+    $.ajax({
+        type:"GET",
+        dataType:"json",
+        url:'ajax.php?getCustomerList=true',
+        success : function(respond){
+            var customers = [];
+            $.each(respond, function(key, value){
+                customers.push(value);
+                
+                if(value.search(expression) != -1){
+                    unorderedList.append("<li class='live'>" + value + "</li>");
+                }
+            })         
+        }
+    })              // !!! trzeba wyczyscic te same dane
+}
+
+// Field for customer
+$("#customerName").on('keyup', callForCustomer);
+$("#customerResult").on("click", "li", liveSearchResult);
