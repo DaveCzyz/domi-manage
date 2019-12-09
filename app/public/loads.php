@@ -39,6 +39,9 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addLoadGroup'])){
     }
 }
 // Filtr groups
+$customer = '';
+$orig     = '';
+$dest     = '';
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['sortGroups'])){
     $conditions = [$_POST['filtr_customer'], $_POST['filtr_origin_country'], $_POST['filtr_destination_country']];
     $tmp_arr = $groupLoads;
@@ -53,12 +56,26 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['sortGroups'])){
             }
         }
     }
+
+    // Filter notification
+    if(isset($_POST['filtr_customer']) && $_POST['filtr_customer'] != "all"){
+        $customer = $_POST['filtr_customer'];
+    }
+    if(isset($_POST['filtr_origin_country']) && $_POST['filtr_origin_country'] != "all"){
+        $orig = $_POST['filtr_origin_country'];
+    }
+    if(isset($_POST['filtr_destination_country']) && $_POST['filtr_destination_country'] != "all"){
+        $dest = $_POST['filtr_destination_country'];
+    }
+
+    // Show result
     if(empty($tmp_arr)){
         $groupLoads = [];
     }else{
         $groupLoads = $tmp_arr;
     }
 }
+
 ?>
 
 <!-- Notification for not connected account with Trans platform -->
@@ -155,16 +172,23 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['sortGroups'])){
         <div class="card">
             <div class="card-body">
                 <!-- Column tittle -->
-                <p class="h4 text-center py-2">Grupy ładunków <button id="test" class="btn btn-success green darken-1 btn-sm">Filtruj</button></p>
+                <p class="h4 text-center py-2">Grupy ładunków <button id="toggleFiltr" class="btn btn-success green darken-1 btn-sm">Filtruj</button></p>
+
+                    <?php if(isset($_POST['sortGroups'])) : ?>
+                        <p>Zastosowane filtry:</p>
+                        <?php if($customer != "") { echo $customer; } ?>
+                        <?php if($orig != "") { echo $orig; } ?>
+                        <?php if($dest != "") { echo $dest; } ?>
+                    <?php endif;?>
 
                     <!-- Sort groups -->
-                    <form action="loads.php" method="POST">
+                    <form action="loads.php" method="POST" id="filtrForm" style="display:none">
 
                         <!-- Sort groups by customer name -->
                         <div class="form-row mb-4">
                             <div class="col">
                                 <label for="sortGroupsByCustomer">Sortuj po - nazwa grupy</label>
-                                <select name="filtr_customer" id="sortGroupsByCustomer" data-name="customer" class="browser-default custom-select"></select>
+                                <select name="filtr_customer" id="sortGroupsByCustomer" class="browser-default custom-select"></select>
                             </div>
                         </div>
 

@@ -30,7 +30,6 @@ if(isset($_GET['getLoadData'])){
         $cust[] = $v[$key];
     }
 
-    $customer_json = json_encode($cust);
     echo json_encode($cust);
 }
 ?>

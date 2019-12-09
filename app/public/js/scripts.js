@@ -27,6 +27,7 @@ $("#cancelLoadGroup").click(function(){
     $("#addNewLoadGroup").show("fast");
 
     $("#customerName").val('');
+    $("#customerResult").html('')
     $("#originCity").val('');
     $("#originCountry").val('');
     $("#destinationCity").val('');
@@ -54,3 +55,7 @@ $("#cancelNewLoad").click(function(e){
     $("#lengthDetails").val('');
 });
 
+// Toggle filter form
+$("#toggleFiltr").click(function(){
+    $("#filtrForm").slideToggle('fast');
+});

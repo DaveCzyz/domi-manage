@@ -168,7 +168,7 @@ function callAjaxPHP(val){
     })
 }
 
-$("#test").on("click", callTest);
+$("#toggleFiltr").on("click", callTest);
 
 function callTest(){
     callAjaxPHP('customer');
@@ -181,6 +181,7 @@ function callback(data, inp){
     e = data;
 
     if(inp == "customer"){
+        $("#sortGroupsByCustomer").html('')
         $("#sortGroupsByCustomer").append("<option value='all'> Wszystkie </option>");
         $.each(e, function(key, value){
             $("#sortGroupsByCustomer").append("<option value='"+ value +"'>"+ value +"</option>");
@@ -188,6 +189,7 @@ function callback(data, inp){
     }
 
     if(inp == "origin_name"){
+        $("#sortGroupsByOriginCountry").html('')
         $("#sortGroupsByOriginCountry").append("<option value='all'> Wszystkie </option>");
         $.each(e, function(key, value){
             $("#sortGroupsByOriginCountry").append("<option value='"+ value +"'>"+ value +"</option>");
@@ -195,6 +197,7 @@ function callback(data, inp){
     }
 
     if(inp == "destination_name"){
+        $("#sortGroupsByDestinationCountry").html('')
         $("#sortGroupsByDestinationCountry").append("<option value='all'> Wszystkie </option>");
         $.each(e, function(key, value){
             $("#sortGroupsByDestinationCountry").append("<option value='"+ value +"'>"+ value +"</option>");
