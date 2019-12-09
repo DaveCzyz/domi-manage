@@ -155,37 +155,35 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['sortGroups'])){
         <div class="card">
             <div class="card-body">
                 <!-- Column tittle -->
-                <p class="h4 text-center py-2">Grupy ładunków <button class="btn btn-success green darken-1 btn-sm">Filtruj</button></p>
+                <p class="h4 text-center py-2">Grupy ładunków <button id="test" class="btn btn-success green darken-1 btn-sm">Filtruj</button></p>
 
                     <!-- Sort groups -->
                     <form action="loads.php" method="POST">
 
                         <!-- Sort groups by customer name -->
-                        <label for="sortGroupsByCustomer">Sortuj po - nazwa grupy</label>
-                        <select name="filtr_customer" id="sortGroupsByCustomer" class="browser-default custom-select">
-                            <option value="all">Wszystkie</option>
-                            <?php foreach($groupLoads as $key => $value) : ?>
-                                <option value="<?php echo $value['customer']; ?>"> <?php echo $value['customer']; ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                        
+                        <div class="form-row mb-4">
+                            <div class="col">
+                                <label for="sortGroupsByCustomer">Sortuj po - nazwa grupy</label>
+                                <select name="filtr_customer" id="sortGroupsByCustomer" data-name="customer" class="browser-default custom-select"></select>
+                            </div>
+                        </div>
+
                         <!-- Sort groups by origin country -->
-                        <label for="sortGroupsByOriginCountry">Sortuj po - kraj załadunku</label>
-                        <select name="filtr_origin_country" id="sortGroupsByOriginCountry" class="browser-default custom-select">
-                            <option value="all">Wszystkie</option>
-                            <?php foreach($groupLoads as $key => $value) : ?>
-                                <option value="<?php echo $value['origin_country']; ?>"> <?php echo $value['origin_country']; ?></option>
-                            <?php endforeach; ?>
-                        </select>
+                        <div class="form-row mb-4">
+                            <div class="col">
+                                <label for="sortGroupsByOriginCountry">Sortuj po - kraj załadunku</label>
+                                <select name="filtr_origin_country" id="sortGroupsByOriginCountry" class="browser-default custom-select"></select>
+                            </div>
+                        </div>
+                        
 
                         <!-- Sort groups by destination country -->
-                        <label for="sortGroupsByDestinationCountry">Sortuj po - kraj rozładunku</label>
-                        <select name="filtr_destination_country" id="sortGroupsByDestinationCountry" class="browser-default custom-select">
-                            <option value="all">Wszystkie</option>
-                            <?php foreach($groupLoads as $key => $value) : ?>
-                                <option value="<?php echo $value['destination_country']; ?>"> <?php echo $value['destination_country']; ?></option>
-                            <?php endforeach; ?>
-                        </select>
+                        <div class="form-row mb-4">
+                            <div class="col">
+                                <label for="sortGroupsByDestinationCountry">Sortuj po - kraj rozładunku</label>
+                                <select name="filtr_destination_country" id="sortGroupsByDestinationCountry" class="browser-default custom-select"></select>
+                            </div>
+                        </div>
 
                         <input type="submit" name="sortGroups" class="btn btn-success green darken-1 btn-sm" value="Szukaj">
 

@@ -21,9 +21,16 @@ $("#addNewLoadGroup").click(function(){
     $(this).hide();
 });
 
+// Clear all inputs and toggle form
 $("#cancelLoadGroup").click(function(){
     $("#loadGroup").slideToggle("fast");
     $("#addNewLoadGroup").show("fast");
+
+    $("#customerName").val('');
+    $("#originCity").val('');
+    $("#originCountry").val('');
+    $("#destinationCity").val('');
+    $("#destinationCountry").val('');
 });
 
 // Toggle slide button in manage_loads.php

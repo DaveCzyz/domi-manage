@@ -104,7 +104,27 @@ $("#loadDestinationResult").on("click","li", postCodeResultDestination);
 // end
 
 //************* AJAX live serach request for customer input *************//
+$("#addNewLoadGroup").on('click', callForCustomer);
+var customers = [];
 function callForCustomer(){
+    $.ajaxSetup({ cache: true });
+    $.ajax({
+        type:"GET",
+        dataType:"json",
+        url:'ajax.php?getCustomerList=true',
+        success : function(respond){
+            var tmp_customer = [];
+            $.each(respond, function(key, value){
+                tmp_customer.push(value);
+            })         
+
+            customers = tmp_customer.filter(function(elem, index, self){
+                return index === self.indexOf(elem);
+            })
+        }
+    })
+}
+function showCustomers(){
     // Result list
     var unorderedList = $(this).next();
     unorderedList.html('');
@@ -113,25 +133,73 @@ function callForCustomer(){
     }
     var searchField = $(this).val();
     var expression  = new RegExp(searchField, "i");
+    $.each(customers, function(key, value){
+        if(value.search(expression) != -1){
+            unorderedList.append("<li class='live'>" + value + "</li>");
+        }
+    })
+}
+// Field for customer
+$("#customerName").on('keyup', showCustomers);
+$("#customerResult").on("click", "li", liveSearchResult);
 
+// end
+
+//************* AJAX request for filter inputs *************//
+function callAjaxPHP(val){  
+    var t = Array();
+    var z = Array();
     $.ajaxSetup({ cache: true });
     $.ajax({
         type:"GET",
         dataType:"json",
-        url:'ajax.php?getCustomerList=true',
+        url:'ajax.php?getLoadData=' + val,
         success : function(respond){
-            var customers = [];
             $.each(respond, function(key, value){
-                customers.push(value);
-                
-                if(value.search(expression) != -1){
-                    unorderedList.append("<li class='live'>" + value + "</li>");
-                }
-            })         
+                t.push(value)
+            })      
+            
+            z = t.filter(function(elem, index, self){
+                return index === self.indexOf(elem);
+            })
+
+            callback(z, val)
         }
-    })              // !!! trzeba wyczyscic te same dane
+    })
 }
 
-// Field for customer
-$("#customerName").on('keyup', callForCustomer);
-$("#customerResult").on("click", "li", liveSearchResult);
+$("#test").on("click", callTest);
+
+function callTest(){
+    callAjaxPHP('customer');
+    callAjaxPHP('origin_name');
+    callAjaxPHP('destination_name');
+}
+
+var e;
+function callback(data, inp){
+    e = data;
+
+    if(inp == "customer"){
+        $("#sortGroupsByCustomer").append("<option value='all'> Wszystkie </option>");
+        $.each(e, function(key, value){
+            $("#sortGroupsByCustomer").append("<option value='"+ value +"'>"+ value +"</option>");
+        })
+    }
+
+    if(inp == "origin_name"){
+        $("#sortGroupsByOriginCountry").append("<option value='all'> Wszystkie </option>");
+        $.each(e, function(key, value){
+            $("#sortGroupsByOriginCountry").append("<option value='"+ value +"'>"+ value +"</option>");
+        })
+    }
+
+    if(inp == "destination_name"){
+        $("#sortGroupsByDestinationCountry").append("<option value='all'> Wszystkie </option>");
+        $.each(e, function(key, value){
+            $("#sortGroupsByDestinationCountry").append("<option value='"+ value +"'>"+ value +"</option>");
+        })
+    }
+}
+
+// end

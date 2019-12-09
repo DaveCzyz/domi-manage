@@ -19,4 +19,18 @@ if(isset($_GET['getCustomerList'])){
     $customer_json = json_encode($cust);
     echo json_encode($cust);
 }
+
+if(isset($_GET['getLoadData'])){
+    $userID = $_SESSION['user_id'];
+    $key    = $_GET['getLoadData'];
+    $groupLoads = Loads::getGroups($userID);
+
+    $cust = array();
+    foreach($groupLoads as $k => $v){
+        $cust[] = $v[$key];
+    }
+
+    $customer_json = json_encode($cust);
+    echo json_encode($cust);
+}
 ?>
