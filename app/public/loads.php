@@ -180,6 +180,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['sortGroups'])){
                 <!-- Column tittle -->
                 <p class="h4 text-center py-2">Grupy ładunków <button id="toggleFiltr" class="btn btn-success green darken-1 btn-sm">Filtruj</button></p>
 
+                    <!-- Filter notification -->
                     <?php if(isset($_POST['sortGroups']) && $filtrCheck == true) : ?>
                         <div class="form-row mb-4">
                             <div class="col">
@@ -252,7 +253,14 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['sortGroups'])){
                                     <a href="#" data-loadID="<?php echo $value['load_id'];?>" class="seeMore btn btn-success green darken-1 btn-sm">Rozwiń (<?php echo $value['related_loads']; ?>)</a>
                                     <input type="submit" name="deleteGroup" class="btn btn-danger btn-sm" onclick="return confirm('Czy napewno chcesz usunąć wybraną grupę ładunków? Zmian nie można cofnąć.');" value="Usuń">
                                 </div>
-                                <ul style="display:none" id="group-<?php echo $value['load_id'];?>"></ul>
+                                <div class="row">
+                                    <div class="col-8">
+
+                                    
+                                    <table class="table" id="group-<?php echo $value['load_id'];?>"></table>
+                                    </div>
+                                </div>
+                                <!-- <ul class="relatedLoadsList" style="display:none" id="group-<?php echo $value['load_id'];?>"></ul> -->
                             </div>
                         </form>
                     <?php endforeach; ?>
@@ -277,9 +285,6 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['sortGroups'])){
     </div>
 
 </div><!-- end-->
-
-
-
 
 
 

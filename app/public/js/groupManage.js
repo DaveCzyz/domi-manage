@@ -1,5 +1,3 @@
-var counter = 0;
-
 $(".seeMore").click(function(event){
     event.preventDefault();
     var loadID = $(this).attr('data-loadID');
@@ -9,10 +7,11 @@ $(".seeMore").click(function(event){
         return
     }
 
-    if(counter === 1){
+    console.log(parent)
+
+    if(parent.children().length > 0){
         parent.slideUp('fast');
         parent.html('');
-        counter = 0;
         return 
 
     }else{
@@ -26,7 +25,8 @@ $(".seeMore").click(function(event){
             var t = JSON.parse(respond);
     
             $.each(t, function(index, key){
-                parent.append("<li>" + key['origin_name'] + ", <i>" + key['origin_postcode'] + "</i> - " + key['destination_name'] + ", <i>" + key['destination_postcode'] + "</i></li>");
+                parent.append("<tr><td>"+key['origin_name']+"</td><td>"+key['origin_postcode']+"</td><td>-></td><td>"+key['destination_name']+"</td><td>"+key['destination_postcode']+"</td></tr>");
+                // parent.append("<li class='list-group-item'>" + key['origin_name'] + ", <i>" + key['origin_postcode'] + "</i> - " + key['destination_name'] + ", <i>" + key['destination_postcode'] + "</i></li>");
             })
     
         }).done(function(){
