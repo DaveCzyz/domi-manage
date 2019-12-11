@@ -185,41 +185,46 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['sortGroups'])){
                             <div class="col">
                                 <span>Zastosowane filtry:</span>
                                 <?php if($customer != "")   { echo "<span class='badge badge-pill green darken-1 badge-success'>Nazwa grupy: ".$customer."</span>" ; } ?>
-                                <?php if($orig != "")       { echo "<span class='badge badge-pill green darken-1 badge-success'>Nazwa grupy: ".$orig."</span>" ; } ?>
-                                <?php if($dest != "")       { echo "<span class='badge badge-pill green darken-1 badge-success'>Nazwa grupy: ".$dest."</span>" ; } ?>
+                                <?php if($orig != "")       { echo "<span class='badge badge-pill green darken-1 badge-success'>Kraj załadunku: ".$orig."</span>" ; } ?>
+                                <?php if($dest != "")       { echo "<span class='badge badge-pill green darken-1 badge-success'>Kraj rozładunku: ".$dest."</span>" ; } ?>
+                                <span class='badge badge-pill badge-warning'><a href="loads.php" id="clearFilter">Wyczyść</a></span>
                             </div>
+                            
                         </div>
                     <?php endif;?>
 
                     <!-- Sort groups -->
-                    <form action="loads.php" method="POST" id="filtrForm" style="display:none">
+                    <form action="loads.php" method="POST" id="filtrForm" class="border border-light p-5" style="display:none">
 
                         <!-- Sort groups by customer name -->
-                        <div class="form-row mb-4">
-                            <div class="col">
-                                <label for="sortGroupsByCustomer">Sortuj po - nazwa grupy</label>
-                                <select name="filtr_customer" id="sortGroupsByCustomer" class="browser-default custom-select"></select>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Nazwa grupy:</span>
                             </div>
+                            <select name="filtr_customer" id="sortGroupsByCustomer" class="browser-default custom-select"></select>
                         </div>
 
                         <!-- Sort groups by origin country -->
-                        <div class="form-row mb-4">
-                            <div class="col">
-                                <label for="sortGroupsByOriginCountry">Sortuj po - kraj załadunku</label>
-                                <select name="filtr_origin_country" id="sortGroupsByOriginCountry" class="browser-default custom-select"></select>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Załadunek w:</span>
                             </div>
+                            <select name="filtr_origin_country" id="sortGroupsByOriginCountry" class="browser-default custom-select"></select>
                         </div>
-                        
 
                         <!-- Sort groups by destination country -->
-                        <div class="form-row mb-4">
-                            <div class="col">
-                                <label for="sortGroupsByDestinationCountry">Sortuj po - kraj rozładunku</label>
-                                <select name="filtr_destination_country" id="sortGroupsByDestinationCountry" class="browser-default custom-select"></select>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Rozładunek w:</span>
                             </div>
+                            <select name="filtr_destination_country" id="sortGroupsByDestinationCountry" class="browser-default custom-select"></select>
                         </div>
 
-                        <input type="submit" name="sortGroups" class="btn btn-success green darken-1 btn-sm" value="Szukaj">
+                        <div class="input-group mb-3">
+                            <div class="col text-right">
+                                <input type="submit" name="sortGroups" class="btn btn-success green darken-1 btn-sm" value="Szukaj">
+                            </div>
+                        </div>
 
                     </form> <!-- end sort groups -->
 
