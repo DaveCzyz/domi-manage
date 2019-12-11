@@ -39,9 +39,10 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addLoadGroup'])){
     }
 }
 // Filtr groups
-$customer = '';
-$orig     = '';
-$dest     = '';
+$customer   = '';
+$orig       = '';
+$dest       = '';
+$filtrCheck = false;
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['sortGroups'])){
     $conditions = [$_POST['filtr_customer'], $_POST['filtr_origin_country'], $_POST['filtr_destination_country']];
     $tmp_arr = $groupLoads;
@@ -57,15 +58,20 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['sortGroups'])){
         }
     }
 
+    $filtrCheck = false;
+
     // Filter notification
     if(isset($_POST['filtr_customer']) && $_POST['filtr_customer'] != "all"){
         $customer = $_POST['filtr_customer'];
+        $filtrCheck = true;
     }
     if(isset($_POST['filtr_origin_country']) && $_POST['filtr_origin_country'] != "all"){
         $orig = $_POST['filtr_origin_country'];
+        $filtrCheck = true;
     }
     if(isset($_POST['filtr_destination_country']) && $_POST['filtr_destination_country'] != "all"){
         $dest = $_POST['filtr_destination_country'];
+        $filtrCheck = true;
     }
 
     // Show result
@@ -174,11 +180,15 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['sortGroups'])){
                 <!-- Column tittle -->
                 <p class="h4 text-center py-2">Grupy ładunków <button id="toggleFiltr" class="btn btn-success green darken-1 btn-sm">Filtruj</button></p>
 
-                    <?php if(isset($_POST['sortGroups'])) : ?>
-                        <p>Zastosowane filtry:</p>
-                        <?php if($customer != "") { echo $customer; } ?>
-                        <?php if($orig != "") { echo $orig; } ?>
-                        <?php if($dest != "") { echo $dest; } ?>
+                    <?php if(isset($_POST['sortGroups']) && $filtrCheck == true) : ?>
+                        <div class="form-row mb-4">
+                            <div class="col">
+                                <span>Zastosowane filtry:</span>
+                                <?php if($customer != "")   { echo "<span class='badge badge-pill green darken-1 badge-success'>Nazwa grupy: ".$customer."</span>" ; } ?>
+                                <?php if($orig != "")       { echo "<span class='badge badge-pill green darken-1 badge-success'>Nazwa grupy: ".$orig."</span>" ; } ?>
+                                <?php if($dest != "")       { echo "<span class='badge badge-pill green darken-1 badge-success'>Nazwa grupy: ".$dest."</span>" ; } ?>
+                            </div>
+                        </div>
                     <?php endif;?>
 
                     <!-- Sort groups -->
