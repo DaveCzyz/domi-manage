@@ -34,6 +34,7 @@ class Session{
     }
 
     public function logout(){
+        self::clearManageLoads();
         unset($_SESSION['user_id']);
         $this->message("Zostałeś poprawnie wylogowany", "success");
         redirect("index.php");

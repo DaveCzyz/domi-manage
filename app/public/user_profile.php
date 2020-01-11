@@ -13,8 +13,6 @@ $id = $_SESSION['user_id'];
 $user = new User();
 $user->getUser($id);
 
-
-
 // Request for changes user password
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['changeUserPassword'])){
     if($user->changePassword($_POST['oldPass'], $_POST['newPass'], $_POST['confNewPass'])){
@@ -25,7 +23,6 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['changeUserPassword'])){
         redirect("user_profile.php");
     }
 }
-
 // Save general user data
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['editUserData'])){
     $user->firstName = $_POST['firstName'];
@@ -40,7 +37,6 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['editUserData'])){
         redirect("user_profile.php");
     }
 }
-
 // Update data for Trans connection
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['editTransConnection'])){
     $user->trans_id     = $_POST['trans_id'];
@@ -53,17 +49,14 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['editTransConnection']))
         redirect("user_profile.php");
     }
 }
-
-
-
-
-
 // Delete account
-if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST[''])){
-
+if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['deleteUser'])){
+    if($user->deleteUser($_POST['deleteAccount'])){
+        $session->logout();
+        $session->message("Konto zostało usunięte", "success");
+        redirect("index.php");
+    }
 }
-
-
 ?>
 
 <!-- Display system messages -->
@@ -132,7 +125,6 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST[''])){
 
             <?php if($user->trans_id != "" && $user->trans_pass != "") : ?>
                 <p class="text-info font-weight-bold">Trans id oraz hasło zostały zapisane</p>
-
             <?php endif; ?>
 
             <!-- Trans ID -->
@@ -195,11 +187,6 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST[''])){
     </div>
 
 </div>
-
-
-
-
-
 <!-- Delete account -->
 <div class="row justify-content-center">
 
@@ -207,25 +194,23 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST[''])){
     <div class="col-4">
     <button id="toggleDeleteAccount" class="btn btn-warning my-4 btn-block">Usuń konto</button>
 
-        <form id="deleteAccount" class="text-center border border-light p-5" style="display:none;" action="">
+        <form id="deleteAccount" class="text-center border border-light p-5" style="display:none;" method="POST" action="">
 
             <!-- Confirm Password -->
             <div class="form-row mb-4">
                 <label for="delteUser">Wpisz hasło</label>
-                <input type="password" id="delteUser" name="deleteAccount" class="form-control border border-warning" value="<?php echo $userData['trans_id']; ?>">
+                <input type="password" id="delteUser" name="deleteAccount" class="form-control border border-warning" required>
                 <small id="delteUser" class="form-text text-muted mb-4">
                     Przywrócenie konta nie będzie możliwe
                 </small>
             </div>
             <!-- Sign up button -->
-            <button class="btn my-4 btn-warning btn-block" name="confirmDeleteUser" type="submit">Usuń konto</button>
+            <input class="btn my-4 btn-warning btn-block" name="deleteUser" type="submit" value="Usuń konto">
 
         </form>
         <!-- End -->
     </div>
 
 </div>
-
-
 
 <?php require 'footer.php';?>

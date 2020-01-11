@@ -282,6 +282,7 @@ class User{
         }
     }
 
+    // Change trans password
     public function changeTransData(){
         $this->trans_pass = $this->hashPassword($this->trans_pass);
         if($this->setUser()){
@@ -294,10 +295,49 @@ class User{
     }
 
 
-    public function deleteUser(){
-        // usunac wszystkie powiazane ladunki!!!
-    }
 
+
+    public function deleteUser($p){
+        global $db;
+        if(empty($p)){
+            echo "wpisz haslo";
+            $this->err[] = "Wpisz hasło";
+            return false;
+        }
+        // Check if password is correct
+        if(!$this->encryptPassword($p, $this->password)){
+            echo 'zle haslo';
+            $this->err[] = "Podane hasło jest nieprawidłowe";
+            return false;
+        }
+        // Delete all related loads
+        $sql = "DELETE FROM related_loads ";
+        $sql.= "WHERE user_id=".$this->id." ";
+        if(!$db->query($sql)){
+            $this->err[] = "Bład. Powiązane ładunki nie zostały usunięte";
+            return false;
+        }
+
+        // Delete all groups of load
+        $sql2 = "DELETE FROM loads ";
+        $sql2.= "WHERE user_id=".$this->id." ";
+        if(!$db->query($sql2)){
+            $this->err[] = "Bład. Grupy ładunków nie zostały usunięte";
+            return false;
+        }
+
+        // Delete user
+        $sql3 = "DELETE FROM " . self::$db_name . " ";
+        $sql3.= "WHERE id=".$this->id." AND uuid='".$this->uuid."' LIMIT 1";
+        if(!$db->query($sql3)){
+            $this->err[] = "Bład. Użytkownik nie został usunięty";
+            return false;
+        }
+ 
+        if(empty($this->err)){
+            return true;
+        }
+    }
 }
 
 
