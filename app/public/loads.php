@@ -255,9 +255,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['sortGroups'])){
                                 </div>
                                 <div class="row">
                                     <div class="col-8">
-
-                                    
-                                    <table class="table" id="group-<?php echo $value['load_id'];?>"></table>
+                                        <table class="table" id="group-<?php echo $value['load_id'];?>"></table>
                                     </div>
                                 </div>
                                 <!-- <ul class="relatedLoadsList" style="display:none" id="group-<?php echo $value['load_id'];?>"></ul> -->

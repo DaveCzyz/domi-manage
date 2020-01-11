@@ -5,16 +5,22 @@ use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
 
 class User{
     protected static $db_name = "users";
+
     public $id;
     public $uuid;
+
     public $firstName;
     public $lastName;
+
+    public $phone;
     public $email;
     public $password;
+
+    public $trans_id;
+    public $trans_pass;
+
     public $activeCode;
     public $active;
-    public $trans_id;
-    public $phone;
     
     public $err = [];
 
@@ -65,15 +71,15 @@ class User{
     // Function for register new users
     public function validateNewUser($em, $ps){
         global $db;
-        $nameVal = '/[\s!#\'\"$@|\/\\*&^%{}();:\.,<>?\[\]=+_~`\-0-9]/i';
-        $emailVal = '/[\s!#\'\"$|\/\\*&^%#{}();,:<>?\[\]=+_~`]/i';
-        $fname = $db->escape_string($this->firstName);
-        $lname = $db->escape_string($this->lastName);
-        $email = $db->escape_string($this->email);
-        $pass  = $db->escape_string($this->password);
-        $confEmail = $db->escape_string($em);
-        $confPass  = $db->escape_string($ps);
-        $uuid = "";
+        $nameVal    = '/[\s!#\'\"$@|\/\\*&^%{}();:\.,<>?\[\]=+_~`\-0-9]/i';
+        $emailVal   = '/[\s!#\'\"$|\/\\*&^%#{}();,:<>?\[\]=+_~`]/i';
+        $fname      = $db->escape_string($this->firstName);
+        $lname      = $db->escape_string($this->lastName);
+        $email      = $db->escape_string($this->email);
+        $pass       = $db->escape_string($this->password);
+        $confEmail  = $db->escape_string($em);
+        $confPass   = $db->escape_string($ps);
+        $uuid       = "";
 
         // Generator for activation code
         $code = uniqid();
@@ -180,6 +186,7 @@ class User{
         return true;
     }
 
+    // Read specify user
     public function getUser($id){
         if(empty($id)){
             $this->err[] = "Brak użytkownika o podanym ID";
@@ -201,17 +208,42 @@ class User{
             $this->activeCode = $row['activeCode'];
             $this->active     = $row['activ'];
             $this->trans_id   = $row['trans_id'];
+            $this->trans_pass = $row['trans_pass'];
             $this->phone      = $row['phone'];
 
             return $row;
         }
     }
 
-
+    // Edit user data
     public function setUser(){
-        
+        global $db;
+        // Personal data
+        $this->firstName = $db->escape_string($this->firstName);
+        $this->lastName  = $db->escape_string($this->lastName);
+        $this->email     = $db->escape_string($this->email);
+        $this->phone     = $db->escape_string($this->phone);
+        // Trans data
+        $this->trans_id  = $db->escape_string($this->trans_id);
+        $this->trans_pass= $db->escape_string($this->trans_pass);
+        // Password
+        $this->password  = $db->escape_string($this->password);
+
+        $sql = "UPDATE ". self::$db_name ." ";
+        $sql.= "SET firstName='".$this->firstName."', lastName='".$this->lastName."', email='".$this->email."', ";
+        $sql.= "password='".$this->password."', trans_id='".$this->trans_id."', trans_pass='".$this->trans_pass."', phone='".$this->phone."' ";
+        $sql.= "WHERE id='".$this->id."' AND uuid='".$this->uuid."' LIMIT 1";
+
+        if($db->query($sql)){
+            return true;
+        }else{
+            $this->err[] = "Wysątpił bład. Spróbuj ponownie";
+            return false;
+        }
+
     }
 
+    // Change and hash new password
     public function changePassword($o, $n, $cn){
         global $db;
         $old     = $db->escape_string($o);
@@ -240,6 +272,7 @@ class User{
         }
 
         if(empty($this->err)){
+            $this->password = $this->hashPassword($new);
             $this->setUser();
             return true;
 
@@ -249,9 +282,20 @@ class User{
         }
     }
 
+    public function changeTransData(){
+        $this->trans_pass = $this->hashPassword($this->trans_pass);
+        if($this->setUser()){
+            $this->err[] = "Dane zostały zaktualizowane";
+            return true;
+        }else{
+            $this->err[] = "Wystąpił błąd. Spróbuj ponownie";
+            return false;
+        }
+    }
+
 
     public function deleteUser(){
-
+        // usunac wszystkie powiazane ladunki!!!
     }
 
 }
