@@ -32,3 +32,14 @@
 <?php require 'navigation.php'; ?>
 <div class="container-fluid p-0">
 
+<?php
+    // Check if user are logged
+    if(!$session->isLogged()){
+        redirect("index.php");
+    }
+
+    // Display system messages
+    $session->displayMessage();
+    $msg_status = $session->status;
+    $msg        = $session->message;
+?>
