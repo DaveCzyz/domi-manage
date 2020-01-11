@@ -20,8 +20,13 @@ $("#addNewLoadGroup").click(function(){
     $("#loadGroup").slideToggle("fast");
     $(this).hide();
 });
+// Toggle slide button in fleet.php
+$("#addNewCarrier").click(function(){
+    $("#newCarrier").slideToggle("fast");
+    $(this).hide();
+});
 
-// Clear all inputs and toggle form
+// Clear all inputs and toggle form - manage_loads.php
 $("#cancelLoadGroup").click(function(){
     $("#loadGroup").slideToggle("fast");
     $("#addNewLoadGroup").show("fast");
@@ -32,6 +37,18 @@ $("#cancelLoadGroup").click(function(){
     $("#originCountry").val('');
     $("#destinationCity").val('');
     $("#destinationCountry").val('');
+});
+
+// Clear all inputs and toggle form - fleet.php
+$("#cancelCarrier").click(function(){
+    $("#newCarrier").slideToggle("fast");
+    $("#addNewCarrier").show("fast");
+
+    $("#carrierName").val('');
+    $("#carrierBase").html('')
+    $("#carrierContact").val('');
+    $("#carrierPhone").val('');
+    $("#carrierEmail").val('');
 });
 
 // Toggle slide button in manage_loads.php

@@ -6,7 +6,24 @@ $userID = $_SESSION['user_id'];
 $user   = new User();
 $user->getUser($userID);
 
-// Get user fleet
+// Add new carrier
+if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addCarrier'])){
+    $carrier = new Carrier($user->id);
+
+    $carrier->carrier_name      = $_POST['carrierName'];
+    $carrier->carrier_base      = $_POST['carrierBase'];
+    $carrier->carrier_person    = $_POST['carrierPerson'];
+    $carrier->carrier_phone     = $_POST['carrierPhone'];
+    $carrier->carrier_email     = $_POST['carrierEmail'];
+
+    if($carrier->setCarrier()){
+        echo 'ok';
+    }else{
+        echo "nie ok";
+    }
+
+
+}
 
 ?>
 
@@ -25,7 +42,7 @@ $user->getUser($userID);
 </div>
 
 <!-- Add new carrier -->
-<div class="row justify-content-center" id="loadGroup">
+<div class="row justify-content-center" id="newCarrier" style="display:none">
     <div class="col-8">
         <div class="card">
             <div class="card-body">
@@ -53,8 +70,8 @@ $user->getUser($userID);
                     <div class="form-row mb-4">
                         <div class="col">
                             <!-- Carrier contact -->
-                            <label for="carrierContact" class="text-left">Osoba kontaktowa</label>
-                            <input type="text" id="carrierContact" name="carrierContact" class="form-control" required>
+                            <label for="carrierPerson" class="text-left">Osoba kontaktowa</label>
+                            <input type="text" id="carrierPerson" name="carrierPerson" class="form-control" required>
                         </div>
                         <div class="col">
                             <!-- Carrier phone -->
@@ -77,10 +94,10 @@ $user->getUser($userID);
 
                     <div class="form-row mb-4">
                         <div class="col-6 text-right">
-                            <input class="btn btn-warning warning-color btn-block my-4" id="cancelLoadGroup" type="button" value="Anuluj">
+                            <input class="btn btn-warning warning-color btn-block my-4" id="cancelCarrier" type="button" value="Anuluj">
                         </div>
                         <div class="col-6">
-                            <input class="btn btn-success green darken-1 btn-block my-4" id="addLoadGroup" name="addLoadGroup" type="submit" value="Dodaj">
+                            <input class="btn btn-success green darken-1 btn-block my-4" id="addCarrier" name="addCarrier" type="submit" value="Dodaj">
                         </div>
                     </div>
 
@@ -90,3 +107,5 @@ $user->getUser($userID);
         </div>
     </div>
 </div><!-- end -->
+
+<?php require 'footer.php';?>
