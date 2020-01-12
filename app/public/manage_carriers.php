@@ -27,8 +27,30 @@ if(empty($carrier)){
     $carrier->getCarrier($_SESSION['carrier_uuid']);
 }
 // Edit carrier
+if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['saveCarrier'])){
+    $carrier->carrier_name      = $_POST['carrier_name'];
+    $carrier->carrier_base      = $_POST['carrier_base'];
+    $carrier->carrier_person    = $_POST['carrier_person'];
+    $carrier->carrier_phone     = $_POST['carrier_phone'];
+    $carrier->carrier_email     = $_POST['carrier_email'];
+
+    if($carrier->editCarrier()){
+        $session->message("Dane zmienione poprawnie", "success");
+        redirect("manage_carriers.php");
+    }else{
+        $session->message($carrier->err[0], "error");
+        redirect("manage_carriers.php");
+    }
+}
 
 // Delete carrier
+if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['deleteCarrier'])){
+
+
+    
+}
+
+
 
 // Add new Truck
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addNewTruck'])){
@@ -89,7 +111,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addNewTruck'])){
                 <div class="card-body">
 
                     <!-- Carrier card -->
-                    <form action="manage_loads.php" method="POST">
+                    <form action="manage_carriers.php" method="POST">
                         <p class="h4 text-center py-4">Edytuj grupę <input class="btn btn-danger btn-sm" name="deleteCarrier" type="submit" value="Usuń"></p>
 
                         <!-- Hidden input for ID -->

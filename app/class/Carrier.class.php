@@ -125,8 +125,42 @@ class Carrier{
     }
 
     // Edit carrier
+    public function editCarrier(){
+        global $db;
+
+        if(empty($this->id) && empty($this->user_id)){
+            return false;
+        }
+
+        // clear variables
+        $this->carrier_name     = $db->escape_string($this->carrier_name);
+        $this->carrier_base     = $db->escape_string($this->carrier_base);
+        $this->carrier_person   = $db->escape_string($this->carrier_person);
+        $this->carrier_phone    = $db->escape_string($this->carrier_phone);
+        $this->carrier_email    = $db->escape_string($this->carrier_email);
+
+        $sql = "UPDATE " . self::$db_name . " ";
+        $sql.= "SET carrier_name='".$this->carrier_name."', carrier_base='".$this->carrier_base."', ";
+        $sql.= "carrier_person ='".$this->carrier_person."', carrier_phone='".$this->carrier_phone."', ";
+        $sql.= "carrier_email='".$this->carrier_email."' ";
+        $sql.= "WHERE id='".$this->id."' AND user_id='".$this->user_id."' LIMIT 1";
+
+        if($db->query($sql)){
+            return true;
+        }else{
+            $this->err[] = "Błąd zapytania SQL. Spróbuj ponownie";
+            return false;
+        }
+    }   
 
     // Delete carrier
+    public static function deleteCarrier(){
+        global $db;
+
+
+        //wyczyscic sesje!
+        //usunac powiazane auta
+    }
 
     // Update counter
     public function updateCounter($n){
