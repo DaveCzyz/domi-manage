@@ -6,6 +6,8 @@ $userID = $_SESSION['user_id'];
 $user   = new User();
 $user->getUser($userID);
 
+$getCarrier = Carrier::getAllCarriers($user->id);
+
 // Add new carrier
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addCarrier'])){
     $carrier = new Carrier($user->id);
@@ -17,12 +19,12 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addCarrier'])){
     $carrier->carrier_email     = $_POST['carrierEmail'];
 
     if($carrier->setCarrier()){
-        echo 'ok';
+        $session->message("Przewoźnik został dodany", "success");
+        redirect("fleet.php");
     }else{
-        echo "nie ok";
+        $session->message($carrier->err[0], "error");
+        redirect("fleet.php");
     }
-
-
 }
 
 ?>
@@ -40,6 +42,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addCarrier'])){
         ?>
     </div>
 </div>
+<!-- end -->
 
 <!-- Add new carrier -->
 <div class="row justify-content-center" id="newCarrier" style="display:none">
@@ -107,5 +110,66 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addCarrier'])){
         </div>
     </div>
 </div><!-- end -->
+
+<!-- Display carriers -->
+<div class="row">
+
+    <!-- if not carriers exist -->
+    <?php if(empty($getCarrier)) : ?>
+        <p>Brak</p>
+    <?php endif; ?>
+    <!-- end -->
+
+    <!-- Show carriers -->
+    <?php if(!empty($getCarrier)) : ?>
+        <?php foreach($getCarrier as $key => $value) : ?>
+            <div class="col-3">
+                <div class="card">
+                    <div class="card-body">
+                        <!-- Carrier name -->
+                        <h5 class="card-title">
+                            <?php echo $value['carrier_name']; ?>
+                            <button type="button" class="showCarrierDetails btn btn-green light-green lighten-1 btn-sm float-right">V</button>
+                        </h5>
+                        <!-- Carrier base -->
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <?php echo $value['carrier_base'];?>
+                        </h6>
+                        <!-- Carrier details -->
+                        <div class="col-12 p-0">
+                            <p class="mb-0"> <i class="fas fa-user"></i> <?php echo $value['carrier_person'];?> </p>
+                            <p class="mb-0"> <i class="fas fa-phone"></i> <?php echo $value['carrier_phone'];?> </p>
+                            <p class="mb-0"> <i class="fas fa-envelope"></i> <a href="mailto:<?php echo $value['carrier_email'];?>"><?php echo $value['carrier_email'];?></a> </p>
+                            <p class="mb-0">Pojazdy: <?php echo $value['carrier_trucks']; ?></p>
+
+                            <!-- <a href="#!" class="card-link">Card link</a>
+                            <a href="#!" class="card-link">Another link</a> -->
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <?php require 'footer.php';?>

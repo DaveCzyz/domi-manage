@@ -23,7 +23,7 @@ class Carrier{
 
     public $err = [];
 
-    public function __construct($user){
+    public function __construct(int $user){
         $this->user_id = $user;
 
         try{
@@ -34,6 +34,7 @@ class Carrier{
         } 
     }
 
+    // Add new carrier
     public function setCarrier(){
         global $db;
         // clear variables
@@ -52,20 +53,40 @@ class Carrier{
         $sql.= "(user_id, carrier_uuid, carrier_name, carrier_base, ";
         $sql.= "carrier_person, carrier_phone, carrier_email) ";
         $sql.= "VALUES ('".$this->user_id."', '".$this->carrier_uuid."', '".$this->carrier_name."', ";
-        $sql.= "'".$this->carrier_base."', '".$this->carrier_person."', '".$this->carrier_phone."', '".$this->carrier_email."') LIMIT 1";
-
-        print_r($sql);
+        $sql.= "'".$this->carrier_base."', '".$this->carrier_person."', '".$this->carrier_phone."', '".$this->carrier_email."')";
 
         if($db->query($sql)){
-            echo 'ok';
             return true;
         }else{
-            echo 'nie ok';
             $this->err[] = "Wystąpił błąd przy przesyłaniu danych. Spróbuj ponownie";
             return false;
         }
 
     }
+
+    // Get all carriers
+    public static function getAllCarriers(int $i){
+        if(empty($i)){
+            return false;
+        }
+
+        global $db;
+        $carrier = [];
+        $sql = "SELECT * FROM " . self::$db_name . " ";
+        $sql.= "WHERE user_id='".$i."'";
+
+        $query = $db->query($sql);
+        while($row = $query->fetch_assoc()){
+            $carrier[] = $row;
+        }
+        return $carrier;    
+    }
+
+    // Get carrier
+
+    // Edit carrier
+
+    // Delete carrier
 
 }
 

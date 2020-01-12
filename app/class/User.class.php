@@ -138,7 +138,7 @@ class User{
         if(empty($this->err)){
             global $db;
             $pass = $this->hashPassword($pass);
-            $sql = "INSERT INTO users ";
+            $sql = "INSERT INTO " . self::$db_name . " ";
             $sql.= " (uuid, firstName, lastName, email, password, activeCode) ";
             $sql.= " VALUES ('$uuid', '$fname', '$lname', '$email', '$pass', '$code')";
             $db->query($sql);
@@ -294,9 +294,7 @@ class User{
         }
     }
 
-
-
-
+    // Delete account
     public function deleteUser($p){
         global $db;
         if(empty($p)){

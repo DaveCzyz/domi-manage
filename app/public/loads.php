@@ -183,6 +183,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['sortGroups'])){
                             
                         </div>
                     <?php endif;?>
+                    <!-- end -->
 
                     <!-- Sort groups -->
                     <form action="loads.php" method="POST" id="filtrForm" class="border border-light p-5" style="display:none">
@@ -217,7 +218,8 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['sortGroups'])){
                             </div>
                         </div>
 
-                    </form> <!-- end sort groups -->
+                    </form> 
+                    <!-- end sort groups -->
 
                 <?php if(!empty($groupLoads)) : ?>
                 

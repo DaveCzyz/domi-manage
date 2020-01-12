@@ -76,3 +76,13 @@ $("#cancelNewLoad").click(function(e){
 $("#toggleFiltr").click(function(){
     $("#filtrForm").slideToggle('fast');
 });
+
+// Toggle carriers card
+$(".showCarrierDetails").click(function(e){
+    var parent = $(this).parent();
+    var next = parent.next().next();
+    next.slideToggle();
+
+
+
+})
