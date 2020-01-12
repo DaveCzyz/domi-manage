@@ -6,8 +6,7 @@ $userID = $_SESSION['user_id'];
 $user   = new User();
 $user->getUser($userID);
 
-// Get carrier
-$carrier = new Carrier($user->id);
+$carrier;
 
 // Get carrier and store in session
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['editCarrier'])){
@@ -19,8 +18,17 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['editCarrier'])){
         redirect("fleet.php");
     }
 
+    $carrier = new Carrier($user->id);
     $carrier->getCarrier($uuid);
 }
+// Resotre object from session
+if(empty($carrier)){
+    $carrier = new Carrier($user->id);
+    $carrier->getCarrier($_SESSION['carrier_uuid']);
+}
+// Edit carrier
+
+// Delete carrier
 
 // Add new Truck
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addNewTruck'])){
@@ -35,6 +43,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addNewTruck'])){
     $truck->truck_plate     = $_POST['truck_plates'];
 
     if($truck->setTruck()){
+        $carrier->updateCounter("plus");
         $session->message("Pojazd został dodany", "success");
         redirect("manage_carriers.php");
     }else{
@@ -43,8 +52,12 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addNewTruck'])){
     }
 }
 
+// Edit truck
 
-print_r($carrier);
+// Delete truck
+
+
+
 
 ?>
 
@@ -66,7 +79,7 @@ print_r($carrier);
 
 
 <div class="row justify-content-center">
-    <!-- Display form with group of loads -->
+    <!-- Display carrier details -->
     <div class="col-3">
 
             <!-- Card -->
@@ -126,7 +139,7 @@ print_r($carrier);
             <!-- Card -->
     </div><!-- end col-5 -->
 
-    <!-- Display related loads with group -->
+    <!-- Display added trucks -->
     <div class="col-8">
         <div class="card">
             <div class="card-body">
@@ -142,7 +155,7 @@ print_r($carrier);
                     <div class="col-8">
 
                         <!-- form for add new load -->
-                        <form action="manage_loads.php" method="POST">
+                        <form action="manage_carriers.php" method="POST">
                             <p class="h5 mb-4 text-center">
                                 <?php if(isset($_GET['edit'])) : ?>
                                     Edytuj pojazd
@@ -237,7 +250,7 @@ print_r($carrier);
                     <p class="text-center">Brak</p>
                 <?php endif; ?>
             
-                <!-- If related loads exist - display all those load -->
+                <!-- If trucks exist - display all those truck -->
 
 
             </div> <!-- end card body -->

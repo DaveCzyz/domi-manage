@@ -128,6 +128,37 @@ class Carrier{
 
     // Delete carrier
 
+    // Update counter
+    public function updateCounter($n){
+        global $db;
+
+        if(empty($n)){
+            return false;
+        }
+
+        if($n == "plus"){
+            $this->carrier_trucks = $this->carrier_trucks + 1;
+        }
+
+        if($n == "minus"){
+            if($this->carrier_trucks == 0){
+                return false;
+            }
+
+            $this->carrier_trucks = $this->carrier_trucks - 1;
+        }
+
+        $sql = "UPDATE " . self::$db_name . " ";
+        $sql.= "SET carrier_trucks='" . $this->carrier_trucks . "' ";
+        $sql.= "WHERE id=".$this->id." AND user_id=".$this->user_id." LIMIT 1";
+
+        if($db->query($sql)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 }
 
 ?>
