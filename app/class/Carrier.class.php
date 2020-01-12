@@ -83,6 +83,46 @@ class Carrier{
     }
 
     // Get carrier
+    public function getCarrier($u){
+        global $db;
+        if(empty($u)){
+            return false;
+        }
+        $u = $db->escape_string($u);
+
+        if(empty($this->user_id)){
+            return false;
+        }
+
+        $sql = "SELECT * FROM " . self::$db_name . " ";
+        $sql.= "WHERE user_id='".$this->user_id."' AND  carrier_uuid='".$u."' LIMIT 1";
+        $query = $db->query($sql);
+
+        if($query->num_rows == 1){
+            while($row = $query->fetch_array()){
+                $this->id               = $row['id'];
+                $this->user_id          = $row['user_id'];
+                $this->carrier_uuid     = $row['carrier_uuid'];
+
+                $this->carrier_name     = $row['carrier_name'];
+                $this->carrier_base     = $row['carrier_base'];
+                $this->carrier_person   = $row['carrier_person'];
+                $this->carrier_phone    = $row['carrier_phone'];
+                $this->carrier_email    = $row['carrier_email'];
+                $this->carrier_trucks   = $row['carrier_trucks'];
+            }
+
+            if($this->carrier_uuid != $u){
+                return false;
+            }
+        }else{
+            return false;
+        }
+
+
+
+
+    }
 
     // Edit carrier
 

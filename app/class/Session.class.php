@@ -101,6 +101,17 @@ class Session{
         unset($_SESSION['load_uuid']);
     }
 
+    public static function manageCarrier($carrier_id, $carrier_uuid){
+        self::clearManageCarrier();
+        $_SESSION['carrier_id']    = $carrier_id;
+        $_SESSION['carrier_uuid']  = $carrier_uuid;
+    }
+
+    public static function clearManageCarrier(){
+        unset($_SESSION['carrier_id']);
+        unset($_SESSION['carrier_uuid']);
+    }
+
 
 
 }

@@ -26,7 +26,6 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addCarrier'])){
         redirect("fleet.php");
     }
 }
-
 ?>
 
 <!-- Page tittle and system message -->
@@ -124,37 +123,68 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addCarrier'])){
     <?php if(!empty($getCarrier)) : ?>
         <?php foreach($getCarrier as $key => $value) : ?>
             <div class="col-3">
-                <div class="card">
-                    <div class="card-body">
-                        <!-- Carrier name -->
-                        <h5 class="card-title">
-                            <?php echo $value['carrier_name']; ?>
-                            <button type="button" class="showCarrierDetails btn btn-green light-green lighten-1 btn-sm float-right">V</button>
-                        </h5>
-                        <!-- Carrier base -->
-                        <h6 class="card-subtitle mb-2 text-muted">
-                            <?php echo $value['carrier_base'];?>
-                        </h6>
-                        <!-- Carrier details -->
-                        <div class="col-12 p-0">
-                            <p class="mb-0"> <i class="fas fa-user"></i> <?php echo $value['carrier_person'];?> </p>
-                            <p class="mb-0"> <i class="fas fa-phone"></i> <?php echo $value['carrier_phone'];?> </p>
-                            <p class="mb-0"> <i class="fas fa-envelope"></i> <a href="mailto:<?php echo $value['carrier_email'];?>"><?php echo $value['carrier_email'];?></a> </p>
-                            <p class="mb-0">Pojazdy: <?php echo $value['carrier_trucks']; ?></p>
+                <form action="manage_carriers.php" method="POST">
+                    <div class="card">
 
-                            <!-- <a href="#!" class="card-link">Card link</a>
-                            <a href="#!" class="card-link">Another link</a> -->
+                        <div class="card-body">
+                            <!-- Carrier name -->
+                            <h5 class="card-title">
+                                <?php echo $value['carrier_name']; ?>
+                                <button type="button" class="showCarrierDetails btn btn-green light-green lighten-1 btn-sm float-right">
+                                    <i class="fas fa-arrow-down"></i>
+                                </button>
+                            </h5>
+                            <!-- Carrier base -->
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                <?php echo $value['carrier_base'];?>
+                            </h6>
+                            <!-- Carrier details -->
+                            <div class="col-12 p-0" style="display:none">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <i class="fas fa-user"></i>
+                                            </td>
+                                            <td>
+                                                <?php echo $value['carrier_person'];?>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <i class="fas fa-phone">
+                                            </td>
+                                            <td>
+                                                <?php echo $value['carrier_phone'];?>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <i class="fas fa-envelope"></i>
+                                            </td>
+                                            <td>
+                                                <a href="mailto:<?php echo $value['carrier_email'];?>"><?php echo $value['carrier_email'];?></a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <p class="mb-0">Pojazdy: <?php echo $value['carrier_trucks']; ?></p>
+
+                                <input type="hidden" name="carrierID" value="<?php echo $value['id'];?>">
+                                <input type="hidden" name="carrierUUID" value="<?php echo $value['carrier_uuid'];?>">
+                                <input class="btn btn-success btn-sm" type="submit" name="editCarrier" value="Edytuj / Dodaj">
+                                <input class="btn btn-danger btn-sm" type="submit" name="deleteCarrier" value="Usuń">
+                            </div>
+
                         </div>
 
                     </div>
-                </div>
+                </form>
             </div>
         <?php endforeach; ?>
     <?php endif; ?>
-
-
-
-
+    <!-- end -->
 
 </div>
 
