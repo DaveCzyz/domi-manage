@@ -7,6 +7,7 @@ $user   = new User();
 $user->getUser($userID);
 
 $carrier;
+$trucks;
 
 // Get carrier and store in session
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['editCarrier'])){
@@ -26,6 +27,10 @@ if(empty($carrier)){
     $carrier = new Carrier($user->id);
     $carrier->getCarrier($_SESSION['carrier_uuid']);
 }
+// Restore carrier trucks
+if(!empty($carrier)){
+    $truck = Fleet::getAllTrucks($carrier->carrier_uuid);
+}
 // Edit carrier
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['saveCarrier'])){
     $carrier->carrier_name      = $_POST['carrier_name'];
@@ -42,15 +47,20 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['saveCarrier'])){
         redirect("manage_carriers.php");
     }
 }
-
 // Delete carrier
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['deleteCarrier'])){
-
-
-    
+    if($carrier->deleteCarrier()){
+        Session::clearManageCarrier();
+        $session->message("Przewoźnik został usunięty", "success");
+        redirect("fleet.php");
+    }else{
+        $session->message($carrier->err[0], "error");
+        redirect("manage_carriers.php");
+    }
 }
 
 
+// Display all carrier trucks
 
 // Add new Truck
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addNewTruck'])){
@@ -78,7 +88,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addNewTruck'])){
 
 // Delete truck
 
-
+print_r($truck);
 
 
 ?>

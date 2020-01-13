@@ -154,13 +154,34 @@ class Carrier{
     }   
 
     // Delete carrier
-    public static function deleteCarrier(){
+    public function deleteCarrier(){
         global $db;
 
+        // Delete all carrier trucks
+        $sql = "DELETE FROM fleet ";
+        $sql.= "WHERE user_id=".$this->user_id." AND related_with='".$this->carrier_uuid."' ";
+        if($db->query($sql)){
+
+            // Delete carrier account
+            $sql2 = "DELETE FROM ". self::$db_name . " ";
+            $sql2.= "WHERE user_id=".$this->user_id." AND id=".$this->id." ";
+            if($db->query($sql2)){
+                return true;
+            }else{
+                $this->err[] = "Błąd. Przewoźnik nie został usunięty poprawnie";
+                return false;
+            }
+
+        }else{
+            $this->err[] = "Błąd. Pojazdy przewoźnika nie zostały usunięte";
+            return false;
+        }
 
         //wyczyscic sesje!
         //usunac powiazane auta
     }
+
+    // Delete all user carriers
 
     // Update counter
     public function updateCounter($n){

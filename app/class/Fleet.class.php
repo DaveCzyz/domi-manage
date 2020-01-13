@@ -70,6 +70,38 @@ class Fleet{
 
     }
 
+    // Get specify truck
+
+    // Get all trucks
+    public static function getAllTrucks($i){
+        global $db;
+        if(empty($i)){
+            return false;
+        }
+
+        $trucks = [];
+
+        $sql = "SELECT * FROM " . self::$db_name . " ";
+        $sql.= "WHERE related_with='".$i."' ";
+        $query = $db->query($sql);
+
+        if($query->num_rows >= 1){
+            while($row = $query->fetch_assoc()){
+                $trucks[] = $row;
+            }
+
+            return $trucks;
+        }else{
+
+            return false;
+        }
+    }
+
+    // Delete specified truck
+
+    // Delete all trucks
+    
+
 
 
 
