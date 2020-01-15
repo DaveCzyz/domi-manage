@@ -324,6 +324,10 @@ class User{
             return false;
         }
 
+        // Delete all user carriers
+
+        // Delete all user trucks
+
         // Delete user
         $sql3 = "DELETE FROM " . self::$db_name . " ";
         $sql3.= "WHERE id=".$this->id." AND uuid='".$this->uuid."' LIMIT 1";

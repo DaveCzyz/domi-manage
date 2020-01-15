@@ -176,12 +176,7 @@ class Carrier{
             $this->err[] = "Błąd. Pojazdy przewoźnika nie zostały usunięte";
             return false;
         }
-
-        //wyczyscic sesje!
-        //usunac powiazane auta
     }
-
-    // Delete all user carriers
 
     // Update counter
     public function updateCounter($n){
@@ -213,7 +208,6 @@ class Carrier{
             return false;
         }
     }
-
 }
 
 ?>

@@ -107,8 +107,9 @@ class Fleet{
                 $this->truck_weight     = $row['truck_weight'];
                 $this->truck_height     = $row['truck_height'];
                 $this->truck_plate      = $row['truck_plate'];
-
             }
+            return true;
+
         }else{
             return false;
         }
@@ -175,8 +176,43 @@ class Fleet{
     }
 
     // Delete specified truck
+    public function deleteTruck(){
+        if(empty($this->id)){
+            return false;
+        }
+        if(empty($this->related_with)){
+            return false;
+        }
+        if(empty($this->user_id)){
+            return false;
+        }
+
+        global $db;
+
+        $sql = "DELETE FROM " . self::$db_name . " ";
+        $sql.= "WHERE id=".$this->id." AND user_id=".$this->user_id." ";
+        $sql.= "AND related_with='".$this->related_with."' LIMIT 1 ";
+        if($db->query($sql)){
+            return true;
+        }else{
+            return false;
+        }
+    }
 
     // Delete all trucks
+    public static function deleteAllTrucks($r){
+        if(empty($r)){
+            return false;
+        }
+        global $db;
+        $sql = "DELETE FROM " . self::$db_name . " ";
+        $sql.= "WHERE related_with='".$r."' ";
+        if($db->query($sql)){
+            return true;
+        }else{
+            return false;
+        }
+    }
     
 
 

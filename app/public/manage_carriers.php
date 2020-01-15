@@ -47,20 +47,25 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['saveCarrier'])){
         redirect("manage_carriers.php");
     }
 }
+// Cancel saving changes
+if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['cancelSaving'])){
+    Session::clearManageCarrier();
+    redirect("fleet.php");
+}
 // Delete carrier
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['deleteCarrier'])){
     if($carrier->deleteCarrier()){
-        Session::clearManageCarrier();
-        $session->message("Przewoźnik został usunięty", "success");
-        redirect("fleet.php");
+        if(Fleet::deleteAllTrucks($carrier->carrier_uuid)){
+            // Delete all trucks
+            Session::clearManageCarrier(); // clear carrier session
+            $session->message("Przewoźnik został usunięty", "success");
+            redirect("fleet.php");
+        }
     }else{
         $session->message($carrier->err[0], "error");
         redirect("manage_carriers.php");
     }
 }
-
-
-
 // Add new Truck
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addNewTruck'])){
     $truck = new Fleet($carrier->carrier_uuid, $user->id);
@@ -82,14 +87,12 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addNewTruck'])){
         redirect("manage_carriers.php");
     }
 }
-
 // Edit truck
 if($_SERVER['REQUEST_METHOD'] == "GET" && isset($_GET['edit'])){
     $truckNubmer = (int)$_GET['edit'];
     $getTruck = new Fleet($carrier->carrier_uuid, $user->id);
     $getTruck->getTruck($truckNubmer);
 }
-
 // Save changes in truck
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['saveChanges'])){
     $id = (int)$_POST['carrier_id'];
@@ -106,21 +109,35 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['saveChanges'])){
         $t->truck_plate     = $_POST['truck_plates'];
 
         if($t->editTruck()){
-
+            $session->message("Zmiany zostały zapisane", "success");
+            redirect("manage_carriers.php");
         }else{
-
+            $session->message("Wystąpił błąd. Spróbuj ponownie", "error");
+            redirect("manage_carriers.php");
         }
 
     }else{
-
+        $session->message("Wystąpił błąd. Spróbuj ponownie", "error");
+        redirect("manage_carriers.php");
     }
 }
-
-
-
 // Delete truck
 if($_SERVER['REQUEST_METHOD'] == "GET" && isset($_GET['delete'])){
-
+    $id = (int)$_GET['delete'];
+    $t  = new Fleet($carrier->carrier_uuid, $user->id);
+    $t->getTruck($id);
+    if($t->deleteTruck()){
+        if($carrier->updateCounter("minus")){
+            $session->message("Pojazd został usunięty", "success");
+            redirect("manage_carriers.php");
+        }else{
+            $session->message("Wystąpił błąd. Dane przewoźnika nie zostały zaktualizowane", "error");
+            redirect("manage_carriers.php");
+        }
+    }else{
+        $session->message("Wystąpił błąd. Pojazd nie został usunięty", "error");
+        redirect("manage_carriers.php");
+    }
 }
 
 ?>
@@ -136,10 +153,6 @@ if($_SERVER['REQUEST_METHOD'] == "GET" && isset($_GET['delete'])){
         ?>
     </div>
 </div>
-
-
-
-
 
 
 <div class="row justify-content-center">
@@ -214,8 +227,9 @@ if($_SERVER['REQUEST_METHOD'] == "GET" && isset($_GET['delete'])){
                     <?php endif; ?>
                 </p>
 
-                <!-- Add / Edit new related load -->
-                <div class="row justify-content-center" style="display:none" id="newTruck" > <!-- display:none -->
+                <!-- Add / Edit new truck -->
+                <div class="row justify-content-center" id="newTruck" 
+                    <?php if(!isset($_GET['edit'])){ echo "style='display:none'"; }; ?> > 
                     <div class="col-8">
 
                         <!-- form for add new load -->
