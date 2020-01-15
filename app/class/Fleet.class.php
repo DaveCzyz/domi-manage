@@ -6,6 +6,8 @@ use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
 class Fleet{
     protected static $db_name = "fleet";
 
+    public $id;
+
     public $related_with;
     public $user_id;
     public $fleet_uuid;
@@ -71,6 +73,46 @@ class Fleet{
     }
 
     // Get specify truck
+    public function getTruck(int $i){
+        if(empty($i)){
+            return false;
+        }
+        if(!is_numeric($i)){
+            return false;
+        }
+        if(empty($this->related_with)){
+            return false;
+        }
+        if(empty($this->user_id)){
+            return false;
+        }
+
+        global $db;
+        $i = $db->escape_string($i);
+
+        $sql = "SELECT * FROM " . self::$db_name . " ";
+        $sql.= "WHERE id=".$i." AND user_id=".$this->user_id." AND related_with='".$this->related_with."' LIMIT 1 ";
+        $query = $db->query($sql);
+        if($query->num_rows == 1){
+            while($row = $query->fetch_assoc()){
+                $this->id               = $row['id'];
+                $this->user_id          = $row['user_id'];
+                $this->fleet_uuid       = $row['fleet_uuid'];
+                $this->related_with     = $row['related_with'];
+                $this->driver_name      = $row['driver_name'];
+                $this->driver_phone     = $row['driver_phone'];
+                $this->driver_id        = $row['driver_id'];
+                $this->truck_type       = $row['truck_type'];
+                $this->truck_ldm        = $row['truck_ldm'];
+                $this->truck_weight     = $row['truck_weight'];
+                $this->truck_height     = $row['truck_height'];
+                $this->truck_plate      = $row['truck_plate'];
+
+            }
+        }else{
+            return false;
+        }
+    }
 
     // Get all trucks
     public static function getAllTrucks($i){
@@ -93,6 +135,41 @@ class Fleet{
             return $trucks;
         }else{
 
+            return false;
+        }
+    }
+
+    // Edit truck
+    public function editTruck(){
+        if(empty($this->user_id)){
+            return false;
+        }
+        if(empty($this->related_with)){
+            return false;
+        }
+
+        global $db;
+        // Clear variables
+        $this->driver_name  = $db->escape_string($this->driver_name);
+        $this->driver_phone = $db->escape_string($this->driver_phone);
+        $this->driver_id    = $db->escape_string($this->driver_id);
+
+        $this->truck_type    = $db->escape_string($this->truck_type);
+        $this->truck_ldm     = $db->escape_string($this->truck_ldm);
+        $this->truck_weight  = $db->escape_string($this->truck_weight);
+        $this->truck_height  = $db->escape_string($this->truck_height);
+        $this->truck_plate   = $db->escape_string($this->truck_plate);
+
+        $sql = "UPDATE " . self::$db_name . " ";
+        $sql.= "SET driver_name='".$this->driver_name."', driver_phone='".$this->driver_phone."', ";
+        $sql.= "driver_id='".$this->driver_id."', truck_type='".$this->truck_type."', ";
+        $sql.= "truck_ldm='".$this->truck_ldm."', truck_weight='".$this->truck_weight."', ";
+        $sql.= "truck_height='".$this->truck_height."', truck_plate='".$this->truck_plate."' ";
+        $sql.= "WHERE id=".$this->id." AND user_id=".$this->user_id." AND related_with='".$this->related_with."' LIMIT 1";
+    
+        if($db->query($sql)){
+            return true;
+        }else{
             return false;
         }
     }

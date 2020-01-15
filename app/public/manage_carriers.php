@@ -7,7 +7,7 @@ $user   = new User();
 $user->getUser($userID);
 
 $carrier;
-$trucks;
+$truck;
 
 // Get carrier and store in session
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['editCarrier'])){
@@ -27,7 +27,7 @@ if(empty($carrier)){
     $carrier = new Carrier($user->id);
     $carrier->getCarrier($_SESSION['carrier_uuid']);
 }
-// Restore carrier trucks
+// Restore carrier trucks (display all carrier trucks)
 if(!empty($carrier)){
     $truck = Fleet::getAllTrucks($carrier->carrier_uuid);
 }
@@ -60,7 +60,6 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['deleteCarrier'])){
 }
 
 
-// Display all carrier trucks
 
 // Add new Truck
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addNewTruck'])){
@@ -85,11 +84,44 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addNewTruck'])){
 }
 
 // Edit truck
+if($_SERVER['REQUEST_METHOD'] == "GET" && isset($_GET['edit'])){
+    $truckNubmer = (int)$_GET['edit'];
+    $getTruck = new Fleet($carrier->carrier_uuid, $user->id);
+    $getTruck->getTruck($truckNubmer);
+}
+
+// Save changes in truck
+if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['saveChanges'])){
+    $id = (int)$_POST['carrier_id'];
+    $t  = new Fleet($carrier->carrier_uuid, $user->id);
+    if($t->getTruck($id)){
+        // Update data
+        $t->driver_name     = $_POST['driver_name'];
+        $t->driver_phone    = $_POST['driver_phone'];
+        $t->driver_id       = $_POST['driver_id'];
+        $t->truck_type      = $_POST['truck_type'];
+        $t->truck_ldm       = $_POST['capacity_length'];
+        $t->truck_weight    = $_POST['capacity_weight'];
+        $t->truck_height    = $_POST['capacity_height'];
+        $t->truck_plate     = $_POST['truck_plates'];
+
+        if($t->editTruck()){
+
+        }else{
+
+        }
+
+    }else{
+
+    }
+}
+
+
 
 // Delete truck
+if($_SERVER['REQUEST_METHOD'] == "GET" && isset($_GET['delete'])){
 
-print_r($truck);
-
+}
 
 ?>
 
@@ -196,9 +228,9 @@ print_r($truck);
                                 <?php endif; ?>
                             </p>
 
-                            <!-- load uuid -->
+                            <!-- truck uuid -->
                             <?php if(isset($_GET['edit'])) : ?>
-                                <input type="hidden" name="carrier_uuid" value="<?php echo $carrier->carrier_uuid; ?>">
+                                <input type="hidden" name="carrier_id" value="<?php echo $getTruck->id; ?>">
                             <?php endif; ?>
 
                             <!-- Driver name -->
@@ -206,7 +238,9 @@ print_r($truck);
                                 <div class="col">
                                     <!-- Origin city -->
                                     <label for="driverName" class="text-left">Kierowca </label>
-                                    <input type="text" id="driverName" name="driver_name" class="form-control">
+                                    <input type="text" id="driverName" name="driver_name" class="form-control"
+                                        <?php if(isset($_GET['edit'])){ echo "value=".$getTruck->driver_name; };?>
+                                    >
                                 </div>
                             </div>
 
@@ -215,12 +249,14 @@ print_r($truck);
                                 <div class="col">
                                     <!-- Driver ID -->
                                     <label for="driverID" class="text-left">Numer dowodu</label>
-                                    <input type="text" id="driverID" name="driver_id" class="form-control" <?php if(isset($_GET['edit'])){ echo "value='".$rl_edit->origin_country.", ".$rl_edit->origin_iso."'"; } ?> >
+                                    <input type="text" id="driverID" name="driver_id" class="form-control" 
+                                    <?php if(isset($_GET['edit'])){ echo "value='".$getTruck->driver_id."'"; } ?> >
                                 </div>
                                 <div class="col">
                                     <!-- Driver Phone-->
                                     <label for="driverPhone">Telefon</label>
-                                    <input type="text" id="driverPhone" name="driver_phone" class="form-control" <?php if(isset($_GET['edit'])){ echo "value='".$rl_edit->origin_postcode."'"; } ?> >
+                                    <input type="text" id="driverPhone" name="driver_phone" class="form-control" 
+                                    <?php if(isset($_GET['edit'])){ echo "value='".$getTruck->driver_phone."'"; } ?> >
                                 </div>
                             </div>
 
@@ -228,7 +264,8 @@ print_r($truck);
                             <div class="form-row mb-4">
                                 <div class="col">
                                     <label for="truckPlates" class="text-left">Numery rejestracyjne </label>
-                                    <input type="text" id="truckPlates" name="truck_plates" class="form-control" <?php if(isset($_GET['edit'])){ echo "value='".$rl_edit->destination_name."'"; } ?> required>
+                                    <input type="text" id="truckPlates" name="truck_plates" class="form-control" 
+                                    <?php if(isset($_GET['edit'])){ echo "value='".$getTruck->truck_plate."'"; } ?> required>
                                 </div>
                             </div>
                             
@@ -237,12 +274,14 @@ print_r($truck);
                                 <div class="col">
                                     <!-- Weight -->
                                     <label for="capacityWeight" class="text-left">Ładowność (t)</label>
-                                    <input type="text" id="capacityWeight" name="capacity_weight" class="form-control" <?php if(isset($_GET['edit'])){ echo "value='".$rl_edit->destination_country.", ". $rl_edit->destination_iso ."'"; } ?> required>
+                                    <input type="text" id="capacityWeight" name="capacity_weight" class="form-control" 
+                                    <?php if(isset($_GET['edit'])){ echo "value='".$getTruck->truck_weight."'"; } ?> required>
                                 </div>
                                 <div class="col">
                                     <!-- Length -->
                                     <label for="capacityLength">Ładowność (m)</label>
-                                    <input type="text" id="capacityLength" name="capacity_length" class="form-control" <?php if(isset($_GET['edit'])){ echo "value='".$rl_edit->destination_postcode."'"; } ?> required>
+                                    <input type="text" id="capacityLength" name="capacity_length" class="form-control" 
+                                    <?php if(isset($_GET['edit'])){ echo "value='".$getTruck->truck_ldm."'"; } ?> required>
                                 </div>
                             </div>
 
@@ -252,12 +291,14 @@ print_r($truck);
                                 <div class="col">
                                     <!-- Truck type -->
                                     <label for="truckType" class="text-left">Rodzaj</label>
-                                    <input type="text" id="truckType" name="truck_type" class="form-control" <?php if(isset($_GET['edit'])){ echo "value='".$rl_edit->weight."'"; } ?> required>
+                                    <input type="text" id="truckType" name="truck_type" class="form-control" 
+                                    <?php if(isset($_GET['edit'])){ echo "value='".$getTruck->truck_type."'"; } ?> required>
                                 </div>
                                 <div class="col">
                                     <!-- Truck height -->
                                     <label for="capacityHeight">Wysokość (m)</label>
-                                    <input type="text" id="capacityHeight" name="capacity_height" class="form-control" <?php if(isset($_GET['edit'])){ echo "value='".$rl_edit->length."'"; } ?> required>
+                                    <input type="text" id="capacityHeight" name="capacity_height" class="form-control" 
+                                    <?php if(isset($_GET['edit'])){ echo "value='".$getTruck->truck_height."'"; } ?> required>
                                 </div>
                             </div>
 
@@ -278,12 +319,48 @@ print_r($truck);
                 </div><!-- end row -->
 
                 <!-- If truck doesnt exists - do not show anythig -->
-                <?php if($carrier->carrier_trucks == "0") : ?>
+                <?php if($carrier->carrier_trucks == "0" && empty($truck)) : ?>
                     <p class="text-center">Brak</p>
                 <?php endif; ?>
             
                 <!-- If trucks exist - display all those truck -->
+                <?php if(!empty($truck) && is_array($truck)) : ?>
 
+                    <table class="table table-borderless">
+                        <tr>
+                            <th>Lp.</th>
+                            <th>Kierowca</th>
+                            <th>Telefon</th>
+                            <th>Nr. dowodu</th>
+                            <th>Pojazd</th>
+                            <th>Nr. pojazdu</th>
+                            <th>Długość</th>
+                            <th>Waga</th>
+                            <th>Wys. naczepy</th>
+                        </tr>
+                            
+                        <?php for($i = 0; $i < count($truck); ++$i) : ?>
+                        <tr class="border-top border-bottom">
+                            <th scope="row"><?php echo $i + 1; ?></th>
+                            <td><?php echo $truck[$i]['driver_name'] ;?></td>
+                            <td><?php echo $truck[$i]['driver_phone'] ;?></td>
+                            <td><?php echo $truck[$i]['driver_id'] ;?></td>
+                            <td><?php echo $truck[$i]['truck_type'] ;?></td>
+                            <td><?php echo $truck[$i]['truck_plate'] ;?></td>
+                            <td><?php echo $truck[$i]['truck_ldm'] ;?></td>
+                            <td><?php echo $truck[$i]['truck_weight'] ;?></td>
+                            <td><?php echo $truck[$i]['truck_height'] ;?></td>
+                        </tr>
+   
+                        <tr>
+                            <th scope="row"></th>
+                            <td><a href="manage_carriers.php?edit=<?php echo $truck[$i]['id'] ;?>" class="btn btn-success green darken-1 btn-sm">Edytuj</a></td>
+                            <td><a href="manage_carriers.php?delete=<?php echo $truck[$i]['id'] ;?>" class="btn btn-danger btn-sm">Usuń</a></td>
+                        </tr>
+                        <?php endfor; ?>
+
+                    </table>
+                <?php endif; ?>
 
             </div> <!-- end card body -->
         </div><!-- end card -->
