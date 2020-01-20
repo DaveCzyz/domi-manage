@@ -1,13 +1,6 @@
 <?php 
-require 'header.php'; 
+require 'header.php';
 
-if($session->isLogged()){
-    redirect("dashboard.php");
-}
-
-$session->displayMessage();
-$msg_status = $session->status;
-$msg        = $session->message;
 
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['login-submit'])){
     $u = new User();

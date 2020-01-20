@@ -1,6 +1,11 @@
 <?php 
 require 'header.php'; 
 
+// Check login session
+if(!$session->isLogged()){
+    redirect("index.php");
+}
+
 // Get user class
 $userID = $_SESSION['user_id'];
 $user   = new User();

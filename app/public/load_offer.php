@@ -6,11 +6,6 @@ if(!$session->isLogged()){
     redirect("index.php");
 }
 
-$session->displayMessage();
-$msg    = $session->message;
-$errors = [];
-
-
 ?>
 
 <div style="display: none">

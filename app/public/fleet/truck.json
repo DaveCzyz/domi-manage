@@ -1,0 +1,57 @@
+{
+    "1" : {
+        "Monday" : {
+            "Loading"   : "",
+            "Unloading" : "",
+            "Kilometers" : "",
+            "Rate"      : ""
+        },
+
+        "Tuesday" : {
+            "Loading"   : "",
+            "Unloading" : "",
+            "Kilometers" : "",
+            "Rate"      : ""
+        },
+
+        "Wednesday" : {
+            "Loading"   : "",
+            "Unloading" : "",
+            "Kilometers" : "",
+            "Rate"      : ""
+        },
+
+        "Thursday" : {
+            "Loading"   : "",
+            "Unloading" : "",
+            "Kilometers" : "",
+            "Rate"      : ""
+        },
+
+        "Friday" : {
+            "Loading"   : "",
+            "Unloading" : "",
+            "Kilometers" : "",
+            "Rate"      : ""
+        },
+
+        "Saturday" : {
+            "Loading"   : "",
+            "Unloading" : "",
+            "Kilometers" : "",
+            "Rate"      : ""
+        },
+
+        "Sunday" : {
+            "Loading"   : "",
+            "Unloading" : "",
+            "Kilometers" : "",
+            "Rate"      : ""
+        },
+
+        "Summary" : {
+            "Kilometers" : "",
+            "Rate"       : ""
+        }
+    }
+}

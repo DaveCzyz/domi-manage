@@ -6,11 +6,6 @@ if(!$session->isLogged()){
     redirect("index.php");
 }
 
-// Display current messages
-$session->displayMessage();
-$msg_status = $session->status;
-$msg        = $session->message;
-
 // Get user class
 $userID = $_SESSION['user_id'];
 $user   = new User();
