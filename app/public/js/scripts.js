@@ -113,3 +113,11 @@ $(".showCarrierDetails").click(function(e){
         arrow.addClass('fas fa-arrow-down');
     }
 })
+
+// Redirect from fleet.php to specify plan
+$("#choosePlan").change(function(){
+    var val = $(this).val();
+    location.href = "fleet.php?getPlan=" + val;
+})
+
+

@@ -12,6 +12,7 @@ $user   = new User();
 $user->getUser($userID);
 
 $getCarrier = Carrier::getAllCarriers($user->id);
+$plans      = Planning::getPlans($user->id);
 
 // Add new carrier
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addCarrier'])){
@@ -31,6 +32,28 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addCarrier'])){
         redirect("fleet.php");
     }
 }
+
+// Read selected pla
+if($_SERVER['REQUEST_METHOD'] == "GET" && isset($_GET['getPlan'])){
+    if(empty($_GET['getPlan'])){
+        return false;
+    }
+
+    $i = $_GET['getPlan'];
+    $planName;
+    $trucks = [];
+    $week = date("W");
+
+    if($group = Planning::getTrucks($i)){
+        $planName = $group[0]['plan_name'];
+        foreach($group as $key => $value){
+            $trucks[] = Planning::getTruckDetais($value['truck_uuid']);
+        }
+    }
+
+    print_r($trucks);
+}
+
 ?>
 
 
@@ -199,40 +222,92 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addCarrier'])){
 <div class="row justify-content-center">
     <div class="col-4 text-center">
         <h3 class="text-center">Planowanie
-            <button type="button" id="addNewCarrier" class="btn btn-sm btn-success green darken-1">Stwórz grupę</button> 
+        <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalLoginForm">Launch</a>
         </h3>
+    </div>
+
+    <div class="col-12 text-center">
+        <div class="col-4">
+            <!-- Select plan -->
+            <select id="choosePlan" class="browser-default custom-select">
+                <?php if(!empty($plans) && $planName == "") : ?>
+                    <option selected disabled>Wybierz plan</option>
+                    <?php foreach($plans as $key => $value) : ?>
+                        <option value="<?php echo $value['plan_uuid'];?>"><?php echo $value['plan_name'];?></option>
+                    <?php endforeach;?>
+                <?php endif; ?>
+
+                <?php if(!empty($plans) && $planName != "") : ?>
+                    <option selected disabled>Wybrane: <?php echo $planName; ?></option>
+                    <?php foreach($plans as $key => $value) : ?>
+                        <option value="<?php echo $value['plan_uuid'];?>"><?php echo $value['plan_name'];?></option>
+                    <?php endforeach;?>
+                <?php endif; ?>
+
+            </select>
+        </div>
     </div>
 </div>
 
+<div class="row justify-content-center">
+    <?php if(!empty($trucks)) : ?>
+        <table>
+            <thead>
+                <tr>
+                    <th>Kierowca</th>
+                    <th>Nr. pojazdu</th>
+                    <th>Typ</th>
+                    <th>Waga</th>
+                    <th>LDM</th>
+                    <th>Wys.</th>
+                </tr>
+            </thead>
+        <?php foreach($trucks as $key => $value) : ?>
+            <tr>
+                <td>
+                    <?php echo $value['driver_name']; ?>
+                    <br>
+                    tel. <?php echo $value['driver_phone']; ?>
+                    <br>
+                    id. <?php echo $value['driver_id']; ?>
+                </td>
+                <td><?php echo $value['truck_plate']; ?></td>
+                <td><?php echo $value['truck_type']; ?></td>
+                <td><?php echo $value['truck_weight']; ?></td>
+                <td><?php echo $value['truck_ldm']; ?></td>
+                <td><?php echo $value['truck_height']; ?></td>
+            </tr>
+        <?php endforeach; ?>
+        </table>
+    <?php endif;?>
+</div>
 
+
+
+<!-- modal window for create new plan -->
 <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <form action="manage_planning.php" method="POST">
                 <div class="modal-header text-center">
-                <h4 class="modal-title w-100 font-weight-bold">Dodaj nowy plan</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body mx-3">
-                <div class="md-form mb-5">
-                    <input type="text" id="defaultForm-email" name="planName" class="form-control validate">
-                    <label data-error="wrong" data-success="right" for="defaultForm-email">Nazwa planu</label>
-                    <i>Po dodaniu nowego planu, wejdź w konto przewoźnika i dodaj wybrane pojazdy do planu.</i>
+                    <h4 class="modal-title w-100 font-weight-bold">Dodaj nowy plan</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-            </div>
-            <div class="modal-footer d-flex justify-content-center">
-                <input type="submit" name="addPlan" value="Dodaj">
-            </div>
+                <div class="modal-body mx-3">
+                    <div class="md-form mb-5">
+                        <input type="text" id="defaultForm-email" name="planName" class="form-control validate">
+                        <label data-error="wrong" data-success="right" for="defaultForm-email">Nazwa planu</label>
+                        <i>Po dodaniu nowego planu, wejdź w konto przewoźnika i dodaj wybrane pojazdy do planu.</i>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <input type="submit" name="addPlan" value="Dodaj">
+                </div>
             </form>
         </div>
     </div>
-</div>
-
-<div class="text-center">
-  <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalLoginForm">Launch
-    Modal Login Form</a>
 </div>
 
 <?php require 'footer.php';?>

@@ -96,7 +96,6 @@ class Planning {
             return false;
         }
     }
-
     // Prevent for double plans
     public static function checkTruck($i, $p, $t){
         global $db;
@@ -109,7 +108,6 @@ class Planning {
             return false;
         }
     }
-
     // Check trucks plan
     public static function getTruckPlan($t){
         if(empty($t)){
@@ -151,6 +149,46 @@ class Planning {
         if($db->query($sql)){
             return true;
         }else{
+            return false;
+        }
+    }
+    // Get truck from plan
+    public static function getTrucks($i){
+        global $db;
+        $db->escape_string($i);
+
+        $trucks = [];
+
+        $sql = "SELECT * FROM " . self::$db_planning_fleet . " ";
+        $sql.= "WHERE related_with='".$i."' ";
+        $query = $db->query($sql);
+
+        if($query->num_rows >= 1){
+            while($row = $query->fetch_assoc()){
+                $trucks[] = $row;
+            }
+            return $trucks;
+        }else{
+
+            return false;
+        }
+    }
+    // Read truck details
+    public static function getTruckDetais($n){
+        global $db;
+        $db->escape_string($n);
+
+        $sql = "SELECT * FROM " . FLEET . " ";
+        $sql.= "WHERE fleet_uuid='".$n."' ";
+        $query = $db->query($sql);
+
+        if($query->num_rows == 1){
+            while($row = $query->fetch_assoc()){
+                $trucks = $row;
+            }
+            return $trucks;
+        }else{
+
             return false;
         }
     }
