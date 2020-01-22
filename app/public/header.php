@@ -33,7 +33,6 @@
 <div class="container-fluid p-0">
 
 <?php
-
     // Display system messages
     $session->displayMessage();
     $msg_status = $session->status;

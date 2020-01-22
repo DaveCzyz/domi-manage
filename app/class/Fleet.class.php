@@ -4,7 +4,7 @@ use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
 
 class Fleet{
-    protected static $db_name = "fleet";
+    protected static $db_name = FLEET;
 
     public $id;
 

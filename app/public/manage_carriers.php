@@ -13,6 +13,7 @@ $user->getUser($userID);
 
 $carrier;
 $truck;
+$plans = Planning::getPlans((int)$user->id);
 
 // Get carrier and store in session
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['editCarrier'])){
@@ -144,7 +145,6 @@ if($_SERVER['REQUEST_METHOD'] == "GET" && isset($_GET['delete'])){
         redirect("manage_carriers.php");
     }
 }
-
 ?>
 
 <!-- Display system messages -->
@@ -359,27 +359,56 @@ if($_SERVER['REQUEST_METHOD'] == "GET" && isset($_GET['delete'])){
                         </tr>
                             
                         <?php for($i = 0; $i < count($truck); ++$i) : ?>
-                        <tr class="border-top border-bottom">
-                            <th scope="row"><?php echo $i + 1; ?></th>
-                            <td><?php echo $truck[$i]['driver_name'] ;?></td>
-                            <td><?php echo $truck[$i]['driver_phone'] ;?></td>
-                            <td><?php echo $truck[$i]['driver_id'] ;?></td>
-                            <td><?php echo $truck[$i]['truck_type'] ;?></td>
-                            <td><?php echo $truck[$i]['truck_plate'] ;?></td>
-                            <td><?php echo $truck[$i]['truck_ldm'] ;?></td>
-                            <td><?php echo $truck[$i]['truck_weight'] ;?></td>
-                            <td><?php echo $truck[$i]['truck_height'] ;?></td>
-                        </tr>
+                            <tr class="border-top border-bottom">
+                                <th scope="row"><?php echo $i + 1; ?></th>
+                                <td><?php echo $truck[$i]['driver_name'] ;?></td>
+                                <td><?php echo $truck[$i]['driver_phone'] ;?></td>
+                                <td><?php echo $truck[$i]['driver_id'] ;?></td>
+                                <td><?php echo $truck[$i]['truck_type'] ;?></td>
+                                <td><?php echo $truck[$i]['truck_plate'] ;?></td>
+                                <td><?php echo $truck[$i]['truck_ldm'] ;?></td>
+                                <td><?php echo $truck[$i]['truck_weight'] ;?></td>
+                                <td><?php echo $truck[$i]['truck_height'] ;?></td>
+                            </tr>
    
-                        <tr>
-                            <th scope="row"></th>
-                            <td><a href="manage_carriers.php?edit=<?php echo $truck[$i]['id'] ;?>" class="btn btn-success green darken-1 btn-sm">Edytuj</a></td>
-                            <td><a href="manage_carriers.php?delete=<?php echo $truck[$i]['id'] ;?>" class="btn btn-danger btn-sm">Usuń</a></td>
-                        </tr>
+                            <tr>
+                                <th scope="row"></th>  
+                                <?php if(!empty($plans)) : ?>
+                                    <td>
+                                        <a class="btn btn-primary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false">Basic dropdown</a>
+
+                                        <div class="dropdown-menu">
+                                            <?php foreach($plans as $key => $value) : ?>
+                                                <a class="dropdown-item" href="manage_planning.php?&u=<?php echo $value['plan_uuid'];?>&t=<?php echo $truck[$i]['fleet_uuid'];?>&n=<?php echo $value['plan_name'];?>">
+                                                    <?php echo $value['plan_name']; ?>
+                                                </a>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </td>            
+                                <?php endif; ?>
+                                <td><a href="manage_carriers.php?edit=<?php echo $truck[$i]['id'] ;?>" class="btn btn-success green darken-1 btn-sm">Edytuj</a></td>
+                                <td><a href="manage_carriers.php?delete=<?php echo $truck[$i]['id'] ;?>" class="btn btn-danger btn-sm">Usuń</a></td>
+                            </tr>
+
+                            <!-- Display truck plans -->
+                            <?php if($p = Planning::getTruckPlan($truck[$i]['fleet_uuid'])) : ?>
+                                <tr>
+                                    <?php foreach($p as $key => $value) : ?>
+                                        <td><?php echo $value['plan_name']; ?><a href="manage_planning.php?deleteTruck=<?php echo $value['id']; ?>"> x </a></td>
+                                    <?php endforeach; ?>
+                                </tr>
+                            <?php endif; ?>
+                            <!-- end -->
+
                         <?php endfor; ?>
+                        <!-- end for -->
 
                     </table>
+                    <!-- end table -->
+
                 <?php endif; ?>
+                <!-- end if -->
 
             </div> <!-- end card body -->
         </div><!-- end card -->

@@ -52,4 +52,21 @@ class DatabaseConnection{
 $db = new DatabaseConnection(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
 
+//*********** Declare Table names ***********//
+
+// For users (User.class.php)
+const USERS = "users";
+// For carriers (Carrier.class.php)
+const CARRIERS = "carriers";
+// For Fleet (Fleet.class.php)
+const FLEET = "fleet";
+// For Loads (Loads.class.php)
+const LOADS = "loads";
+// For Related_loads (ActiveLoads.class.php)
+const RELATED = "related_loads";
+// For Planning (Planning.class.php)
+const PLANNING = "planning";
+// For Planning - trucks (Planning.class.php)
+const PLANNING_TRUCK = "planning_trucks";
+
 ?>

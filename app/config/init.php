@@ -7,5 +7,6 @@
     require_once '../class/ActiveLoads.class.php';
     require_once '../class/Carrier.class.php';
     require_once '../class/Fleet.class.php';
+    require_once '../class/Planning.class.php';
     require_once 'functions.php';
 ?>

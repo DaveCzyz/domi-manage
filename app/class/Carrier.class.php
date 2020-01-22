@@ -5,7 +5,7 @@ use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
 
 class Carrier{
 
-    protected static $db_name = "carriers";
+    protected static $db_name = CARRIERS;
 
     public $id;
 

@@ -33,6 +33,8 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addCarrier'])){
 }
 ?>
 
+
+
 <!-- Page tittle and system message -->
 <div class="row justify-content-center">
     <div class="col-10 center">
@@ -50,7 +52,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addCarrier'])){
 
 <!-- Add new carrier -->
 <div class="row justify-content-center" id="newCarrier" style="display:none">
-    <div class="col-8">
+    <div class="col-10">
         <div class="card">
             <div class="card-body">
                 <!-- Carrier form -->
@@ -109,16 +111,14 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addCarrier'])){
                     </div>
 
                 </form>
-                <!-- Loads group form -->
+                <!-- end form -->
             </div>
         </div>
     </div>
 </div><!-- end -->
 
 <!-- Display carriers -->
-<div class="row justify-content-center">
-    <div class="col-12">
-
+<div class="row">
         <!-- if not carriers exist -->
         <?php if(empty($getCarrier)) : ?>
             <div class="col text-center">
@@ -130,10 +130,11 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addCarrier'])){
         <!-- Show carriers -->
         <?php if(!empty($getCarrier)) : ?>
             <?php foreach($getCarrier as $key => $value) : ?>
+
                 <div class="col-3">
+
                     <form action="manage_carriers.php" method="POST">
                         <div class="card">
-
                             <div class="card-body">
                                 <!-- Carrier name -->
                                 <h5 class="card-title">
@@ -183,17 +184,55 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addCarrier'])){
                                     <input type="hidden" name="carrierUUID" value="<?php echo $value['carrier_uuid'];?>">
                                     <input class="btn btn-success btn-sm" type="submit" name="editCarrier" value="Edytuj / Dodaj">
                                 </div>
-
                             </div>
 
                         </div>
                     </form>
+
                 </div>
+
             <?php endforeach; ?>
         <?php endif; ?>
         <!-- end -->
+</div>
 
+<div class="row justify-content-center">
+    <div class="col-4 text-center">
+        <h3 class="text-center">Planowanie
+            <button type="button" id="addNewCarrier" class="btn btn-sm btn-success green darken-1">Stwórz grupę</button> 
+        </h3>
     </div>
+</div>
+
+
+<div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="manage_planning.php" method="POST">
+                <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-weight-bold">Dodaj nowy plan</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body mx-3">
+                <div class="md-form mb-5">
+                    <input type="text" id="defaultForm-email" name="planName" class="form-control validate">
+                    <label data-error="wrong" data-success="right" for="defaultForm-email">Nazwa planu</label>
+                    <i>Po dodaniu nowego planu, wejdź w konto przewoźnika i dodaj wybrane pojazdy do planu.</i>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <input type="submit" name="addPlan" value="Dodaj">
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="text-center">
+  <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalLoginForm">Launch
+    Modal Login Form</a>
 </div>
 
 <?php require 'footer.php';?>

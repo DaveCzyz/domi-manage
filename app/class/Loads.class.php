@@ -5,7 +5,7 @@ use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
 
 
 class Loads{
-    protected static $db_name = "loads";
+    protected static $db_name = LOADS;
 
     public $id;
     public $load_id;

@@ -4,7 +4,7 @@ use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
 
 class User{
-    protected static $db_name = "users";
+    protected static $db_name = USERS;
 
     public $id;
     public $uuid;
