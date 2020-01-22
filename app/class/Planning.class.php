@@ -192,5 +192,26 @@ class Planning {
             return false;
         }
     }
+    // Read carrier name
+    public static function getCarrier($f){
+        global $db;
+        if(empty($f)){
+            return false;
+        }
+        $f = $db->escape_string($f);
+
+        $sql = "SELECT * FROM " . CARRIERS . " ";
+        $sql.= "WHERE carrier_uuid='".$f."' LIMIT 1";
+        $query = $db->query($sql);
+        if($query->num_rows == 1){
+            while($row = $query->fetch_assoc()){
+                $carrier = $row;
+            }
+            return $carrier;
+        }else{
+
+            return false;
+        }
+    }
 }
 ?>

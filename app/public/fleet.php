@@ -33,7 +33,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addCarrier'])){
     }
 }
 
-// Read selected pla
+// Read selected plan
 if($_SERVER['REQUEST_METHOD'] == "GET" && isset($_GET['getPlan'])){
     if(empty($_GET['getPlan'])){
         return false;
@@ -51,8 +51,14 @@ if($_SERVER['REQUEST_METHOD'] == "GET" && isset($_GET['getPlan'])){
         }
     }
 
-    print_r($trucks);
+    
 }
+
+// Read selected week
+if($_SERVER['REQUEST_METHOD'] == "GET" && isset($_GET['week'])){
+
+}
+
 
 ?>
 
@@ -251,9 +257,10 @@ if($_SERVER['REQUEST_METHOD'] == "GET" && isset($_GET['getPlan'])){
 
 <div class="row justify-content-center">
     <?php if(!empty($trucks)) : ?>
-        <table>
+        <table class="table table-bordered">
             <thead>
                 <tr>
+                    <th>Przewoźnik / baza</th>
                     <th>Kierowca</th>
                     <th>Nr. pojazdu</th>
                     <th>Typ</th>
@@ -264,6 +271,13 @@ if($_SERVER['REQUEST_METHOD'] == "GET" && isset($_GET['getPlan'])){
             </thead>
         <?php foreach($trucks as $key => $value) : ?>
             <tr>
+                <?php if($c = Planning::getCarrier($value['related_with'])) : ?>
+                    <td>
+                        <?php echo $c['carrier_name']; ?>
+                        <br>
+                        <?php echo $c['carrier_base']; ?>
+                    </td>
+                <?php endif; ?>
                 <td>
                     <?php echo $value['driver_name']; ?>
                     <br>
